@@ -10,6 +10,7 @@ public class Part2 {
         stringArray.add("!");
 
         System.out.println(stringArray);
+        System.out.println(stringArray.get(1));
 
     }
 
