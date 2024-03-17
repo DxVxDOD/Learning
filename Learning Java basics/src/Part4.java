@@ -1,5 +1,8 @@
 public class Part4 {
     public static void main(String[] args) {
+
+       int num = 0;
+
         Whistle dog = new Whistle("wau");
 
         Door door = new Door();
@@ -17,5 +20,17 @@ public class Part4 {
 
         Product orange = new Product("orange", 12.6, 300);
         orange.printProduct();
+
+        int num2 = mutate(num);
+
+        System.out.println(num + 1);
+        System.out.println(mutate(num));
+        System.out.println(num);
+        System.out.println(num2);
+
+    }
+
+    public static int mutate(int num){
+        return num + 1;
     }
 }
