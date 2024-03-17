@@ -1,17 +1,19 @@
 import java.util.ArrayList;
 
 public class Part2 {
-
     public static void main(String[] args) {
-        ArrayList<String> stringArray = new ArrayList<>();
 
-        stringArray.add("Hello");
-        stringArray.add("World");
-        stringArray.add("!");
+        ArrayList<String> textArray = new ArrayList<>();
 
-        System.out.println(stringArray);
-        System.out.println(stringArray.get(1));
+        textArray.add("Hello");
+        textArray.add("!");
+        textArray.add("World");
+        textArray.add("!");
+
+        textArray.remove(1);
+
+        System.out.println(textArray);
+        System.out.println(textArray.get(2));
 
     }
-
 }

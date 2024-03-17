@@ -1,6 +1,3 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-
 import java.util.Scanner;
 
 public class Part1 {
@@ -9,10 +6,10 @@ public class Part1 {
 
         System.out.println("Print stars:");
         int num = Integer.parseInt(scanner.nextLine());
-//        int num2 = Integer.parseInt(scanner.nextLine());
+        int num2 = Integer.parseInt(scanner.nextLine());
 
-//        printSquare(num);
-//        printRectangle(num, num2);
+        printSquare(num);
+        printRectangle(num, num2);
         printChristmasTree(num);
 
     }
@@ -27,6 +24,7 @@ public class Part1 {
         }
     }
 
+
     public static void printDash(int num) {
 
         int i = 0;
@@ -36,7 +34,6 @@ public class Part1 {
         }
 
     }
-
     public static void printChristmasTree(int size) {
 
         for (int i = 1; i <= size; i++) {
