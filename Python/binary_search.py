@@ -1,5 +1,3 @@
-import random
-
 
 def binary_search(arr: list, item: int) -> int:
     low = 0
