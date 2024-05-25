@@ -7,9 +7,7 @@ arr3 = [1112, 11, 2]
 def insertion_sort(arr):
     # right pointer
     i = 1
-    count = 0
     while i < len(arr):
-        count += 1
         # card in right hand
         k = arr[i]
         # card in left hand, left pointer
@@ -18,22 +16,16 @@ def insertion_sort(arr):
         while j >= 0 and arr[j] > k:
             arr[j + 1] = arr[j]
             j = j - 1
-            count += 1
         arr[j + 1] = k
         i += 1
-    print(count)
 
 # The time complexity of the algorithm is O(N * N) becuase we have 1 nested loop,
 # we loop trough it in quadratic time.
 
 
 insertion_sort(arr1)
-# insertion_sort(arr2, count)
-# insertion_sort(arr3, count)
 
-print(arr1, len(arr1))
-# print(arr2)
-# print(arr3)
+print(arr1)
 
 
 def reverse_insertion_sort(arr):
