@@ -1,5 +1,4 @@
 from collections import deque
-from typing import Optional
 
 graph = {}
 graph["me"] = ["alice", "bob", "calire", "Beea"]
@@ -29,24 +28,19 @@ def breadth_first_search(name: str):
     return False
 
 
-print(breadth_first_search("me"))
+def bfs(head, needle, graph):
+    q = deque()
+    q += graph[head]
+    visited = []
+    while q:
+        curr = q.popleft()
+        if curr not in visited:
+            if curr == needle:
+                return True
+            else:
+                q += graph[curr]
+                visited.append(curr)
+    return False
 
 
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
-class Solution:
-    def isPalindrome(self, head: Optional[ListNode]) -> bool:
-        res = []
-        while head:
-            print(res)
-            res.append(head.val)
-            head = head.next
-            if not head.next:
-                return res == res.reverse()
-
-
-print(Solution.isPalindrome([], [1, 2, 2, 1]))
+print(bfs("me", "jhonny", graph))
