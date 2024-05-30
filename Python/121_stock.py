@@ -11,3 +11,7 @@ def best_time(arr):
 
 best_time([7,1,5,3,6,4])
 print(best_time([7,1,5,3,6,4]))
+
+strs = "word"
+res = list(strs)
+print(res[:1:-1])
