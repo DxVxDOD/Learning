@@ -1,18 +1,36 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"maps"
+	"slices"
+)
 
 func main() {
-	var a string = "text"
-	fmt.Println(a)
+	arr := []int{100, 100, 99}
+	ht := make(map[int]int)
+	hs := make(map[int]int)
 
-	var b int = 10
-	fmt.Println(b)
-
-	var c, d int = 10, 12
-	fmt.Println(c, d)
-
-	e := "no var text"
-	f := 10
-	println(e, f)
+	for _, num := range arr {
+		if _, v := hs[num]; !v {
+			hs[num] = num
+			fmt.Println(v)
+			fmt.Println("not in")
+		} else {
+			fmt.Println(v)
+			fmt.Println("is in")
+		}
+	}
+	fmt.Println(arr)
+	slices.Sort(arr)
+	values := slices.Collect(maps.Values(hs))
+	fmt.Println("v", values)
+	for i, num := range values {
+		ht[num] = i + 1
+	}
+	fmt.Println("a", arr)
+	for i, num := range arr {
+		arr[i] = ht[num]
+	}
+	fmt.Println("a", arr)
 }
