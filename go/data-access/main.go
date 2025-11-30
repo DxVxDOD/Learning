@@ -56,6 +56,19 @@ func albumByID(id int64) (Album, error) {
 	return alb, nil
 }
 
+func addAlbum(album Album) (int64, error) {
+	result, err := db.Exec("INSERT INTO album (title, artist, price) VALUES (?, ?,?)", album.Title, album.Artist, album.Price)
+	if err != nil {
+		return 0, fmt.Errorf("addAlbum: %v", err)
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("addAlbum: %v", err)
+	}
+	return id, nil
+}
+
 func main() {
 	// capture connection props
 	cfg := mysql.NewConfig()
