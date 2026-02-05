@@ -3,15 +3,12 @@ package main
 import "fmt"
 
 func main() {
-	x := 200
-	var b byte = 255
+	det := []string{"7868190130M7522", "5303914400F9211", "9273338290F4010"}
+	res := 0
+	for _, el := range det {
+		age := el[11:13]
+		fmt.Println("Age", age)
+	}
 
-	fmt.Println("x: ", x, "b: ", b)
-
-	sum1 := x + int(b)
-	sum2 := byte(x) + b
-
-	fmt.Println("byte(x): ", byte(x), "int(b): ", int(b))
-
-	fmt.Println("sum1: ", sum1, "sum2: ", sum2)
+	fmt.Println(res)
 }
