@@ -3,12 +3,24 @@ package main
 import "fmt"
 
 func main() {
-	det := []string{"7868190130M7522", "5303914400F9211", "9273338290F4010"}
-	res := 0
-	for _, el := range det {
-		age := el[11:13]
-		fmt.Println("Age", age)
+	strs := []string{"ab", "a"}
+
+	res := ""
+	strsLen := len(strs)
+	first := strs[0]
+	firstLen := len(first)
+	for i := 0; i < firstLen; i++ {
+		fEl := first[i]
+		for j := 0; j < strsLen; j++ {
+			fmt.Println(i, j, strsLen)
+			strsEl := strs[j][i]
+			if strsEl != fEl {
+				fmt.Println(res)
+			}
+		}
+		res += string(fEl)
 	}
+	fmt.Println(res)
 
 	fmt.Println(res)
 }
