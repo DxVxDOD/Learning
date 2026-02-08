@@ -1,37 +1,23 @@
 package main
 
-import (
-	"fmt"
-	"log"
-
-	"example.com/greetings"
-)
+import "fmt"
 
 func main() {
-	log.SetPrefix("greetings: ")
-	log.SetFlags(0)
+	calcExp := func(x, z int64) int64 {
+		var y int64 = 1
 
-	messageOne, err := greetings.Hello("Puffy")
-	if err != nil {
-		log.Fatal(err)
+		for z != 0 {
+			r := z % 2
+			z = z / 2
+			if r == 1 {
+				y = x * y
+			}
+			x = x * x
+		}
+		return y
 	}
 
-	messageTwo, err := greetings.Hello("Ari")
-	if err != nil {
-		log.Fatal(err)
-	}
+	res := calcExp(2, 25)
 
-	names := []string{"Gladys", "Samantha", "Darrin"}
-
-	messages, err := greetings.Hellos(names)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(messageOne)
-	fmt.Println(messageTwo)
-
-	for _, val := range messages {
-		fmt.Println(val)
-	}
+	fmt.Println(res)
 }
