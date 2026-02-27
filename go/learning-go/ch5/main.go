@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -22,7 +23,50 @@ func main() {
 	fmt.Println(calculator())
 	fmt.Println(anonymus())
 	clousreInSort()
-	cat()
+	// cat()
+	fileLen()
+}
+
+func getFile(name string) (*os.File, func() error, error) {
+	file, err := os.Open(name)
+	if err != nil {
+		return nil, nil, err
+	}
+	return file, func() error {
+		return file.Close()
+	}, nil
+}
+
+func fileLen() {
+	if len(os.Args) < 2 {
+		log.Fatal("Not eenough arguments")
+	}
+	file, closer, err := getFile(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() {
+		if err := closer(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	// var data []byte
+	data := make([]byte, 2048)
+	for {
+		count, err := file.Read(data)
+		if err != nil {
+			if err != io.EOF {
+				log.Fatal(err)
+			}
+			break
+		}
+		int, err := os.Stdout.Write(data[:count])
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Stdout Write retuned val: ", int)
+	}
 }
 
 func cat() {
@@ -78,7 +122,7 @@ func calculator() int {
 		{"2", "+", "3"},
 		{"2", "-", "3"},
 		{"2", "*", "3"},
-		{"2", "/", "3"},
+		{"2", "/", "0"},
 		{"2", "%", "3"},
 		{"two", "*", "three"},
 		{"2"},
@@ -104,17 +148,47 @@ func calculator() int {
 			fmt.Println(err)
 			continue
 		}
-		result = opFunc(p1, p2)
+		// p3, err := strconv.Atoi(exp[3])
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	continue
+		// }
+		// if p3 == 0 {
+		// 	fmt.Println("Cannot devide by 0")
+		// 	continue
+		// }
+		result, err = opFunc(p1, p2)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 	}
 	return result
 }
 
-func add(i, j int) int { return i + j }
-func sub(i, j int) int { return i - j }
-func mul(i, j int) int { return i * j }
-func div(i, j int) int { return i / j }
+func add(i, j int) (int, error) {
+	return i + j, nil
+}
 
-var opMap = map[string]func(int, int) int{
+func sub(i, j int) (int, error) {
+	return i - j, nil
+}
+
+func mul(i, j int) (int, error) {
+	if i == 0 || j == 0 {
+		return 0, errors.New("mult by 0")
+	}
+	return i * j, nil
+}
+
+func div(i, j int) (int, error) {
+	if j == 0 || i == 0 {
+		return 0, errors.New("div by 0")
+	}
+	return i / j, nil
+}
+
+var opMap = map[string]func(int, int) (int, error){
 	"+": add,
 	"-": sub,
 	"*": mul,
