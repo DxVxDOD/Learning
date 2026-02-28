@@ -24,7 +24,15 @@ func main() {
 	fmt.Println(anonymus())
 	clousreInSort()
 	// cat()
-	fileLen()
+	// fileLen()
+	prefix := prefixer("Hello")
+	fmt.Println(prefix("Puffy"))
+}
+
+func prefixer(pref string) func(str string) string {
+	return func(str string) string {
+		return fmt.Sprintf("%v, %v!", pref, str)
+	}
 }
 
 func getFile(name string) (*os.File, func() error, error) {
