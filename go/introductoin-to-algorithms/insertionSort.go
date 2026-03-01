@@ -1,6 +1,6 @@
 package main
 
-func insertionSort(arr []int) []int {
+func InsertionSort(arr []int) []int {
 	arrLen := len(arr)
 	for i := 2; i < arrLen; i++ {
 		el := arr[i]
