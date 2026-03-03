@@ -83,5 +83,20 @@ func (d *DynamicSequence[T]) InsertFirst(val T) int {
 	d.start--
 	d.dynSeq[d.start] = val
 	d.length++
+
 	return d.length
+}
+
+func (d *DynamicSequence[T]) DeleteFirst() (T, error) {
+	if 0 >= d.length {
+		var zero T
+		return zero, errors.New("called delete on a empty sequence")
+	}
+
+	valToBeDeleted := d.dynSeq[d.start]
+
+	d.start++
+	d.length--
+
+	return valToBeDeleted, nil
 }

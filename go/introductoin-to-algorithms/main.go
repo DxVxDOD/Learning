@@ -38,4 +38,9 @@ func main() {
 	fmt.Println(dynSeq.IterDynSeq())
 	fmt.Println(dynSeq.Cap())
 	fmt.Println(dynSeq.GetAt(0))
+	val, err := dynSeq.DeleteFirst()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dynSeq.IterDynSeq(), val)
 }
