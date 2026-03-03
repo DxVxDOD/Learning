@@ -38,9 +38,53 @@ func main() {
 	fmt.Println(dynSeq.IterDynSeq())
 	fmt.Println(dynSeq.Cap())
 	fmt.Println(dynSeq.GetAt(0))
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
 	val, err := dynSeq.DeleteFirst()
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	val, err = dynSeq.DeleteFirst()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	val, err = dynSeq.DeleteFirst()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	val, err = dynSeq.DeleteFirst()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	val, err = dynSeq.DeleteFirst()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	val, err = dynSeq.DeleteFirst()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	val, err = dynSeq.DeleteFirst()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
 }
