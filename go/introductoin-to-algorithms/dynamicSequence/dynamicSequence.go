@@ -3,6 +3,7 @@ package dynamicsequence
 
 import (
 	"errors"
+	"fmt"
 )
 
 type DynamicSequence[T any] struct {
@@ -23,13 +24,14 @@ func (d *DynamicSequence[T]) Build(x []T) int {
 }
 
 func (d *DynamicSequence[T]) upSize() {
-	newDynSeq := make([]T, d.capacity*2)
+	newDynSeq := make([]T, d.capacity*2+1)
 	diffByHalf := (cap(newDynSeq) - cap(d.dynSeq) + 1) / 2
 
 	for i, v := range d.dynSeq {
 		newDynSeq[i+diffByHalf] = v
 	}
 
+	fmt.Println(newDynSeq)
 	d.capacity = cap(newDynSeq)
 	d.dynSeq = newDynSeq
 	d.start = d.start + diffByHalf
@@ -38,15 +40,18 @@ func (d *DynamicSequence[T]) upSize() {
 
 func (d *DynamicSequence[T]) downSize() {
 	newDynSeq := make([]T, d.capacity/2)
-	diffByHalf := (cap(d.dynSeq) - cap(newDynSeq) + 1) / 2
+	diffByHalf := (cap(newDynSeq) + 1) / 2
+	fmt.Println("diffByHalf: ", diffByHalf)
 	for i := d.start; i < d.end; i++ {
 		newDynSeq[i-diffByHalf] = d.dynSeq[i]
 	}
 
+	fmt.Println("newDynSeq: ", newDynSeq)
 	d.capacity = cap(newDynSeq)
 	d.dynSeq = newDynSeq
 	d.start = d.start - diffByHalf
 	d.end = d.end - diffByHalf
+	fmt.Printf("newEnd: %v and new start: %v \n", d.end, d.start)
 }
 
 func (d *DynamicSequence[T]) Len() int {
@@ -110,4 +115,22 @@ func (d *DynamicSequence[T]) DeleteFirst() (T, error) {
 	d.length--
 
 	return valToBeDeleted, nil
+}
+
+func (d *DynamicSequence[T]) InsertLast(val T) int {
+	if 0 >= d.length {
+		d.Build([]T{val})
+		return d.length
+	}
+
+	fmt.Printf("len: %v, cap: %v \n", d.length, d.capacity)
+	if d.length >= d.capacity {
+		d.upSize()
+	}
+
+	d.end++
+	d.dynSeq[d.end] = val
+	d.length++
+
+	return d.length
 }

@@ -87,4 +87,20 @@ func main() {
 	}
 	fmt.Println(dynSeq.IterDynSeq(), val)
 	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	dynSeq.InsertLast(1)
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	dynSeq.InsertLast(2)
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	dynSeq.InsertLast(3)
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
+
+	dynSeq.InsertLast(4)
+	fmt.Println(dynSeq.IterDynSeq(), val)
+	fmt.Println(dynSeq.Len(), dynSeq.Cap())
 }
