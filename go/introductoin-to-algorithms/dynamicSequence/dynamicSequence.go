@@ -15,27 +15,39 @@ type DynamicSequence[T any] struct {
 }
 
 func (d *DynamicSequence[T]) Build(x []T) int {
-	d.dynSeq = x
-	d.length = len(x)
-	d.capacity = cap(d.dynSeq)
-	d.start = 0
-	d.end = d.length
+	initLen := len(x)
+	starterCap := initLen * 3
+	starterDynSeq := make([]T, starterCap)
+
+	for i, v := range x {
+		starterDynSeq[i+initLen] = v
+	}
+
+	d.length = initLen
+	d.capacity = starterCap
+	d.start = initLen
+	d.end = initLen * 2
+
+	d.dynSeq = starterDynSeq
+	fmt.Println(starterDynSeq)
 	return d.length
 }
 
 func (d *DynamicSequence[T]) upSize() {
-	newDynSeq := make([]T, d.capacity*2+1)
-	diffByHalf := (cap(newDynSeq) - cap(d.dynSeq) + 1) / 2
+	oldLen := d.Len()
+	newLen := oldLen * 2
+	newCap := newLen * 3
+	newDynSeq := make([]T, newCap)
 
 	for i, v := range d.dynSeq {
-		newDynSeq[i+diffByHalf] = v
+		newDynSeq[i+newLen] = v
 	}
 
-	fmt.Println(newDynSeq)
-	d.capacity = cap(newDynSeq)
+	d.capacity = newCap
+	d.start = d.start + newLen
+	d.end = d.end + newLen
+
 	d.dynSeq = newDynSeq
-	d.start = d.start + diffByHalf
-	d.end = d.end + diffByHalf
 }
 
 func (d *DynamicSequence[T]) downSize() {
@@ -88,7 +100,7 @@ func (d *DynamicSequence[T]) InsertFirst(val T) int {
 		return d.length
 	}
 
-	if d.length >= d.capacity {
+	if d.length >= d.capacity/3 {
 		d.upSize()
 	}
 
