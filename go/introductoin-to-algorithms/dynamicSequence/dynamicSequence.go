@@ -3,6 +3,7 @@ package dynamicsequence
 
 import (
 	"errors"
+	"fmt"
 )
 
 type DynamicSequence[T any] struct {
@@ -59,8 +60,12 @@ func (d *DynamicSequence[T]) downSize() {
 	newCap := oldCap / 2
 	newDynSeq := make([]T, newCap)
 
+	fmt.Printf("old %v \n", d.dynSeq)
+	fmt.Printf("val %v start: %v \n", d.dynSeq[d.start], d.start)
+
 	diffByHalf := newCap / 3
-	for i := d.start; i < d.end; i++ {
+	for i := d.start - 1; i < d.end-1; i++ {
+		fmt.Println(d.dynSeq[i])
 		newDynSeq[diffByHalf] = d.dynSeq[i]
 	}
 
@@ -69,6 +74,7 @@ func (d *DynamicSequence[T]) downSize() {
 	d.end = diffByHalf * 2
 
 	d.dynSeq = newDynSeq
+	fmt.Printf("new %v \n", newDynSeq)
 }
 
 func (d *DynamicSequence[T]) Len() int {
@@ -140,7 +146,7 @@ func (d *DynamicSequence[T]) InsertLast(val T) int {
 		return d.length
 	}
 
-	if d.length >= d.capacity {
+	if d.length >= d.capacity/3 {
 		d.upSize()
 	}
 
