@@ -78,7 +78,7 @@ func TestUpSizeAndInsertFirst(t *testing.T) {
 
 func TestDeleteFirstAndDownSize(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
-	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70})
+	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80})
 	startLen := dynSeq.Len()
 	startCap := dynSeq.Cap()
 
@@ -128,5 +128,44 @@ func TestDeleteFirstAndDownSize(t *testing.T) {
 	secondDecCap := dynSeq.Cap()
 	if decCap/2 != secondDecCap {
 		t.Fatalf("second capacity %v should have decreased by 2 folds, new capacity %v", startCap, decCap/2)
+	}
+}
+
+func TestInseertLastAndGetLast(t *testing.T) {
+	dynSeq := &dynamicsequence.DynamicSequence[int]{}
+	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+
+	valToBeInserted := 1
+
+	oldCap := dynSeq.Cap()
+	oldLen := dynSeq.Len()
+
+	newLen := dynSeq.InsertLast(valToBeInserted)
+	newCap := dynSeq.Cap()
+
+	if oldLen >= newLen {
+		t.Fatalf("new length should be larger than the new one. New length: %v", newLen)
+	}
+
+	if oldCap*2 != newCap {
+		t.Fatalf("new capacity should be 6 times the old length: new capacity -> %v, old length -> %v", newCap, oldLen)
+	}
+
+	last, err := dynSeq.GetAt(dynSeq.Len() - 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if last != valToBeInserted {
+		t.Fatalf("the first value %v does not match what was inserted %v", last, valToBeInserted)
+	}
+
+	for i := range dynSeq.Len() {
+		dynSeq.InsertFirst(i)
+	}
+	secondNewCap := dynSeq.Cap()
+
+	if newCap*2 != secondNewCap {
+		t.Fatalf("new capacity should be 6 times the old length: new capacity -> %v, old length -> %v", newCap, oldLen)
 	}
 }
