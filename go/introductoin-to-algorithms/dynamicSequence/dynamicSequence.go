@@ -148,8 +148,36 @@ func (d *DynamicSequence[T]) InsertLast(val T) int {
 		d.upSize()
 	}
 
+	d.dynSeq[d.end] = val
 	d.end++
 	d.length++
 
 	return d.length
+}
+
+func (d *DynamicSequence[T]) GetFirst() T {
+	return d.dynSeq[d.start]
+}
+
+func (d *DynamicSequence[T]) GetLast() T {
+	return d.dynSeq[d.end-1]
+}
+
+func (d *DynamicSequence[T]) DeleteLast() (T, error) {
+	var zero T
+	if 0 >= d.length {
+		return zero, errors.New("called delete on a empty sequence")
+	}
+
+	valToBeDeleted := d.dynSeq[d.start]
+	d.dynSeq[d.start] = zero
+
+	d.length--
+	d.start++
+
+	if d.length <= d.capacity/6 {
+		d.downSize()
+	}
+
+	return valToBeDeleted, nil
 }

@@ -66,6 +66,11 @@ func TestUpSizeAndInsertFirst(t *testing.T) {
 		t.Fatalf("the first value %v does not match what was inserted %v", first, valToBeInserted)
 	}
 
+	getFirst := dynSeq.GetFirst()
+	if getFirst != valToBeInserted {
+		t.Fatalf("the first value %v does not match what was inserted %v", first, valToBeInserted)
+	}
+
 	for i := range dynSeq.Len() {
 		dynSeq.InsertFirst(i)
 	}
@@ -160,8 +165,13 @@ func TestInseertLastAndGetLast(t *testing.T) {
 		t.Fatalf("the first value %v does not match what was inserted %v", last, valToBeInserted)
 	}
 
+	getLast := dynSeq.GetLast()
+	if getLast != valToBeInserted {
+		t.Fatalf("the first value %v does not match what was inserted %v", last, valToBeInserted)
+	}
+
 	for i := range dynSeq.Len() {
-		dynSeq.InsertFirst(i)
+		dynSeq.InsertLast(i)
 	}
 	secondNewCap := dynSeq.Cap()
 
