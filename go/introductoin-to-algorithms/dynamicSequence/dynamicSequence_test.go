@@ -182,9 +182,62 @@ func TestInseertLastAndGetLast(t *testing.T) {
 	for i := range dynSeq.Len() {
 		dynSeq.InsertLast(i)
 	}
+
 	secondNewCap := dynSeq.Cap()
 
 	if newCap*2 != secondNewCap {
 		t.Fatalf("new capacity should be 6 times the old length: new capacity -> %v, old length -> %v", newCap, oldLen)
+	}
+}
+
+func DeleteLast(t *testing.T) {
+	dynSeq := &dynamicsequence.DynamicSequence[int]{}
+	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80})
+	startLen := dynSeq.Len()
+	startCap := dynSeq.Cap()
+
+	numOfDeleteFirstLoops := startLen / 2
+	for range numOfDeleteFirstLoops {
+		toBeDeleted, err := dynSeq.GetAt(dynSeq.Len() - 1)
+		if err != nil {
+			t.Fatal(err)
+		}
+		val, err := dynSeq.DeleteLast()
+		if err != nil {
+			t.Fatalf("unexpected error on DeleteLast: %e", err)
+		}
+		if toBeDeleted != val {
+			t.Fatalf("The deleted value should match the value captured above: toBeDeleted %v <-> %v val", toBeDeleted, val)
+		}
+	}
+
+	decLen := dynSeq.Len()
+	if decLen != startLen-numOfDeleteFirstLoops {
+		t.Fatalf("Length should have decreased by %v, curr len %v", numOfDeleteFirstLoops, dynSeq.Len())
+	}
+	decCap := dynSeq.Cap()
+	if startCap/2 != decCap {
+		t.Fatalf("starter capacity %v should have decreased by 2 folds, new capacity %v", startCap, decCap)
+	}
+
+	numOfDeleteSecondLoops := startLen / 4
+	for range numOfDeleteSecondLoops {
+		toBeDeleted := dynSeq.GetLast()
+		val, err := dynSeq.DeleteLast()
+		if err != nil {
+			t.Fatalf("unexpected error on DeleteLast: %e", err)
+		}
+		if toBeDeleted != val {
+			t.Fatalf("The deleted value should match the value captured above: toBeDeleted %v <-> %v val", toBeDeleted, val)
+		}
+	}
+
+	secondDecLen := dynSeq.Len()
+	if secondDecLen != decLen-numOfDeleteSecondLoops {
+		t.Fatalf("Length should have decreased by %v, curr len %v", numOfDeleteSecondLoops, dynSeq.Len())
+	}
+	secondDecCap := dynSeq.Cap()
+	if decCap/2 != secondDecCap {
+		t.Fatalf("second capacity %v should have decreased by 2 folds, new capacity %v", startCap, decCap/2)
 	}
 }

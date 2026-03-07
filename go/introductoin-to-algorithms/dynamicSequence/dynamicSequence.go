@@ -15,9 +15,11 @@ type DynamicSequence[T any] struct {
 
 func (d *DynamicSequence[T]) Build(x []T) int {
 	initLen := len(x)
+
 	if initLen%2 != 0 {
 		initLen++
 	}
+
 	starterCap := initLen * 3
 	starterDynSeq := make([]T, starterCap)
 
@@ -31,6 +33,7 @@ func (d *DynamicSequence[T]) Build(x []T) int {
 	d.end = initLen * 2
 
 	d.dynSeq = starterDynSeq
+
 	return d.length
 }
 
@@ -83,6 +86,16 @@ func (d *DynamicSequence[T]) IterDynSeq() []T {
 	return d.dynSeq[d.start:d.end]
 }
 
+func (d *DynamicSequence[T]) SetAt(idx int, val T) error {
+	if idx >= d.length {
+		return errors.New("index out of bounds")
+	}
+
+	d.dynSeq[idx] = val
+
+	return nil
+}
+
 func (d *DynamicSequence[T]) GetAt(idx int) (T, error) {
 	if idx >= d.length {
 		var zero T
@@ -91,12 +104,12 @@ func (d *DynamicSequence[T]) GetAt(idx int) (T, error) {
 	return d.dynSeq[idx+d.start], nil
 }
 
-func (d *DynamicSequence[T]) SetAt(idx int, val T) error {
-	if idx >= d.length {
-		return errors.New("index out of bounds")
-	}
-	d.dynSeq[idx] = val
-	return nil
+func (d *DynamicSequence[T]) GetFirst() T {
+	return d.dynSeq[d.start]
+}
+
+func (d *DynamicSequence[T]) GetLast() T {
+	return d.dynSeq[d.end-1]
 }
 
 func (d *DynamicSequence[T]) InsertFirst(val T) int {
@@ -152,14 +165,6 @@ func (d *DynamicSequence[T]) InsertLast(val T) int {
 	}
 
 	return d.length
-}
-
-func (d *DynamicSequence[T]) GetFirst() T {
-	return d.dynSeq[d.start]
-}
-
-func (d *DynamicSequence[T]) GetLast() T {
-	return d.dynSeq[d.end-1]
 }
 
 func (d *DynamicSequence[T]) DeleteLast() (T, error) {
