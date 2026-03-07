@@ -35,21 +35,19 @@ func (d *DynamicSequence[T]) Build(x []T) int {
 }
 
 func (d *DynamicSequence[T]) upSize() {
-	oldLen := d.Len()
-	if oldLen%2 != 0 {
-		oldLen++
-	}
-	newLen := oldLen * 2
-	newCap := newLen * 3
+	oldCap := d.capacity
+	newCap := oldCap * 2
 	newDynSeq := make([]T, newCap)
 
-	for i, v := range d.dynSeq {
-		newDynSeq[i+newLen] = v
+	j := d.length
+	for i := d.start; i < d.end; i++ {
+		newDynSeq[j] = d.dynSeq[i]
+		j++
 	}
 
 	d.capacity = newCap
-	d.start = d.start + newLen
-	d.end = d.end + newLen
+	d.start = d.length
+	d.end = j
 
 	d.dynSeq = newDynSeq
 }
@@ -62,7 +60,6 @@ func (d *DynamicSequence[T]) downSize() {
 	diffByHalf := newCap / 3
 	j := diffByHalf
 	for i := d.start; i < d.end; i++ {
-		// fmt.Printf("i %v end %v len %v \n", i, d.end, d.length)
 		newDynSeq[j] = d.dynSeq[i]
 		j++
 	}
@@ -108,7 +105,7 @@ func (d *DynamicSequence[T]) InsertFirst(val T) int {
 		return d.length
 	}
 
-	if d.length >= d.capacity/3 {
+	if d.length >= d.capacity/2 {
 		d.upSize()
 	}
 
@@ -144,13 +141,15 @@ func (d *DynamicSequence[T]) InsertLast(val T) int {
 		return d.length
 	}
 
-	if d.length >= d.capacity/6 {
-		d.upSize()
-	}
+	tippingPoint := d.capacity - (d.capacity / 3)
 
 	d.dynSeq[d.end] = val
 	d.end++
 	d.length++
+
+	if d.length >= tippingPoint {
+		d.upSize()
+	}
 
 	return d.length
 }

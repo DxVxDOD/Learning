@@ -46,7 +46,12 @@ func TestUpSizeAndInsertFirst(t *testing.T) {
 
 	oldCap := dynSeq.Cap()
 	oldLen := dynSeq.Len()
-	newLen := dynSeq.InsertFirst(valToBeInserted)
+
+	for range dynSeq.Len() {
+		dynSeq.InsertFirst(valToBeInserted)
+	}
+
+	newLen := dynSeq.Len()
 	newCap := dynSeq.Cap()
 
 	if oldLen >= newLen {
@@ -54,7 +59,7 @@ func TestUpSizeAndInsertFirst(t *testing.T) {
 	}
 
 	if oldCap*2 != newCap {
-		t.Fatalf("new capacity should be 6 times the old length: new capacity -> %v, old length -> %v", newCap, oldLen)
+		t.Fatalf("new capacity should be 6 times the old length: new capacity -> %v, old cap -> %v", newCap, oldCap)
 	}
 
 	first, err := dynSeq.GetAt(0)
@@ -145,7 +150,11 @@ func TestInseertLastAndGetLast(t *testing.T) {
 	oldCap := dynSeq.Cap()
 	oldLen := dynSeq.Len()
 
-	newLen := dynSeq.InsertLast(valToBeInserted)
+	for range dynSeq.Len() {
+		dynSeq.InsertLast(valToBeInserted)
+	}
+
+	newLen := dynSeq.Len()
 	newCap := dynSeq.Cap()
 
 	if oldLen >= newLen {
@@ -167,7 +176,7 @@ func TestInseertLastAndGetLast(t *testing.T) {
 
 	getLast := dynSeq.GetLast()
 	if getLast != valToBeInserted {
-		t.Fatalf("the first value %v does not match what was inserted %v", last, valToBeInserted)
+		t.Fatalf("the first value %v does not match what was inserted %v", getLast, valToBeInserted)
 	}
 
 	for i := range dynSeq.Len() {
