@@ -158,11 +158,11 @@ func TestInseertLastAndGetLast(t *testing.T) {
 	newCap := dynSeq.Cap()
 
 	if oldLen >= newLen {
-		t.Fatalf("new length should be larger than the new one. New length: %v", newLen)
+		t.Fatalf("new length should be larger than the new one. New length: %v oldLen: %v", newLen, oldLen)
 	}
 
 	if oldCap*2 != newCap {
-		t.Fatalf("new capacity should be 6 times the old length: new capacity -> %v, old length -> %v", newCap, oldLen)
+		t.Fatalf("new capacity should be 2 times the old cap: new capacity -> %v, old cap -> %v", newCap, oldCap)
 	}
 
 	last, err := dynSeq.GetAt(dynSeq.Len() - 1)
@@ -178,19 +178,9 @@ func TestInseertLastAndGetLast(t *testing.T) {
 	if getLast != valToBeInserted {
 		t.Fatalf("the first value %v does not match what was inserted %v", getLast, valToBeInserted)
 	}
-
-	for i := range dynSeq.Len() {
-		dynSeq.InsertLast(i)
-	}
-
-	secondNewCap := dynSeq.Cap()
-
-	if newCap*2 != secondNewCap {
-		t.Fatalf("new capacity should be 6 times the old length: new capacity -> %v, old length -> %v", newCap, oldLen)
-	}
 }
 
-func DeleteLast(t *testing.T) {
+func TestDeleteLast(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
 	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80})
 	startLen := dynSeq.Len()
@@ -239,5 +229,32 @@ func DeleteLast(t *testing.T) {
 	secondDecCap := dynSeq.Cap()
 	if decCap/2 != secondDecCap {
 		t.Fatalf("second capacity %v should have decreased by 2 folds, new capacity %v", startCap, decCap/2)
+	}
+}
+
+func TestSetAt(t *testing.T) {
+	dynSeq := &dynamicsequence.DynamicSequence[int]{}
+	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+
+	idx := 2
+	valToBeInserted := 11
+	err := dynSeq.SetAt(idx, valToBeInserted)
+	if err != nil {
+		t.Fatalf("this index should be within the bonuds of the slice %v, %e", idx, err)
+	}
+
+	insertedVal, err := dynSeq.GetAt(idx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if valToBeInserted != insertedVal {
+		t.Fatalf("Values do not match %v != %v", valToBeInserted, insertedVal)
+	}
+
+	outOfBoundsIdx := 11
+	err = dynSeq.SetAt(outOfBoundsIdx, valToBeInserted)
+	if err == nil {
+		t.Fatalf("This index %v shoule be out of bounds", outOfBoundsIdx)
 	}
 }

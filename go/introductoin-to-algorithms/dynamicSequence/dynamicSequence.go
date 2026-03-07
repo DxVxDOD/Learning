@@ -69,7 +69,7 @@ func (d *DynamicSequence[T]) downSize() {
 
 	d.capacity = newCap
 	d.start = diffByHalf
-	d.end = diffByHalf * 2
+	d.end = j
 
 	d.dynSeq = newDynSeq
 }
@@ -91,7 +91,7 @@ func (d *DynamicSequence[T]) SetAt(idx int, val T) error {
 		return errors.New("index out of bounds")
 	}
 
-	d.dynSeq[idx] = val
+	d.dynSeq[d.start+idx] = val
 
 	return nil
 }
@@ -156,13 +156,12 @@ func (d *DynamicSequence[T]) InsertLast(val T) int {
 
 	tippingPoint := d.capacity - (d.capacity / 3)
 
+	if d.length+1 >= tippingPoint {
+		d.upSize()
+	}
 	d.dynSeq[d.end] = val
 	d.end++
 	d.length++
-
-	if d.length >= tippingPoint {
-		d.upSize()
-	}
 
 	return d.length
 }
@@ -173,11 +172,11 @@ func (d *DynamicSequence[T]) DeleteLast() (T, error) {
 		return zero, errors.New("called delete on a empty sequence")
 	}
 
-	valToBeDeleted := d.dynSeq[d.start]
-	d.dynSeq[d.start] = zero
+	valToBeDeleted := d.dynSeq[d.end-1]
+	d.dynSeq[d.end-1] = zero
 
 	d.length--
-	d.start++
+	d.end--
 
 	if d.length <= d.capacity/6 {
 		d.downSize()

@@ -1,10 +1,6 @@
 // Package linkedlist respresentes a data structure called linked lists. This data structure is sequential but not contiguous in memory.
 package linkedlist
 
-import (
-	"errors"
-)
-
 type Linkedlist[T any] struct {
 	Item   T
 	next   *Linkedlist[T]
@@ -63,16 +59,16 @@ func (l *Linkedlist[T]) Add(val T) *Linkedlist[T] {
 	return newNode
 }
 
-func (l *Linkedlist[T]) GetAt(idx int) (T, error) {
-	var link *Linkedlist[T]
-
-	for range idx {
-		link = l.next
-		if link == nil {
-			var zero T
-			return zero, errors.New("index out of range")
-		}
-	}
-
-	return link.Item, nil
-}
+// func (l *Linkedlist[T]) GetAt(idx int) (T, error) {
+// 	var link *Linkedlist[T]
+//
+// 	for range idx {
+// 		link = l.next
+// 		if link == nil {
+// 			var zero T
+// 			return zero, errors.New("index out of range")
+// 		}
+// 	}
+//
+// 	return link.Item, nil
+// }
