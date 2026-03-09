@@ -8,10 +8,12 @@ import (
 
 func TestBuildAndGetAt(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
-	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	starterLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	starterCap := dynSeq.Cap()
-	starterLen := dynSeq.Len()
 
 	last, err := dynSeq.GetAt(starterLen - 1)
 	if err != nil {
@@ -40,13 +42,22 @@ func TestBuildAndGetAt(t *testing.T) {
 
 func TestUpSizeAndInsertFirst(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
-	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	_, err := dynSeq.GetFirst()
+	if err == nil {
+		t.Fatal("This should have err")
+	}
 
+	oldLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
 	oldCap := dynSeq.Cap()
-	oldLen := dynSeq.Len()
 
 	for i := range dynSeq.Len() {
-		dynSeq.InsertFirst(i + 1)
+		_, err := dynSeq.InsertFirst(i + 1)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 
 	newLen := dynSeq.Len()
@@ -69,13 +80,19 @@ func TestUpSizeAndInsertFirst(t *testing.T) {
 		t.Fatalf("the first value %v does not match what was inserted %v", first, oldLen)
 	}
 
-	getFirst := dynSeq.GetFirst()
+	getFirst, err := dynSeq.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
 	if getFirst != oldLen {
 		t.Fatalf("the first value %v does not match what was inserted %v getFirst", first, oldLen)
 	}
 
 	for i := range dynSeq.Len() {
-		dynSeq.InsertFirst(i + 1)
+		_, err := dynSeq.InsertFirst(i + 1)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 	seoondNewCap := dynSeq.Cap()
 
@@ -86,8 +103,10 @@ func TestUpSizeAndInsertFirst(t *testing.T) {
 
 func TestDeleteFirstAndDownSize(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
-	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80})
-	startLen := dynSeq.Len()
+	startLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
 	startCap := dynSeq.Cap()
 
 	numOfDeleteFirstLoops := startLen / 2
@@ -141,13 +160,23 @@ func TestDeleteFirstAndDownSize(t *testing.T) {
 
 func TestInseertLastAndGetLast(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
-	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	_, err := dynSeq.GetLast()
+	if err == nil {
+		t.Fatal("This should have err")
+	}
+
+	oldLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	oldCap := dynSeq.Cap()
-	oldLen := dynSeq.Len()
 
 	for i := range dynSeq.Len() {
-		dynSeq.InsertLast(i + 1)
+		_, err := dynSeq.InsertLast(i + 1)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 
 	newLen := dynSeq.Len()
@@ -170,7 +199,10 @@ func TestInseertLastAndGetLast(t *testing.T) {
 		t.Fatalf("the first value %v does not match what was inserted %v", last, oldLen)
 	}
 
-	getLast := dynSeq.GetLast()
+	getLast, err := dynSeq.GetLast()
+	if err != nil {
+		t.Fatal(err)
+	}
 	if getLast != oldLen {
 		t.Fatalf("the first value %v does not match what was inserted %v", getLast, oldLen)
 	}
@@ -178,8 +210,10 @@ func TestInseertLastAndGetLast(t *testing.T) {
 
 func TestDeleteLast(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
-	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80})
-	startLen := dynSeq.Len()
+	startLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
 	startCap := dynSeq.Cap()
 
 	numOfDeleteFirstLoops := startLen / 2
@@ -208,7 +242,10 @@ func TestDeleteLast(t *testing.T) {
 
 	numOfDeleteSecondLoops := startLen / 4
 	for range numOfDeleteSecondLoops {
-		toBeDeleted := dynSeq.GetLast()
+		toBeDeleted, err := dynSeq.GetLast()
+		if err != nil {
+			t.Fatal(err)
+		}
 		val, err := dynSeq.DeleteLast()
 		if err != nil {
 			t.Fatalf("unexpected error on DeleteLast: %e", err)
@@ -230,11 +267,14 @@ func TestDeleteLast(t *testing.T) {
 
 func TestSetAt(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
-	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	_, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	idx := 2
 	valToBeInserted := 11
-	err := dynSeq.SetAt(idx, valToBeInserted)
+	err = dynSeq.SetAt(idx, valToBeInserted)
 	if err != nil {
 		t.Fatalf("this index should be within the bonuds of the slice %v, %e", idx, err)
 	}
@@ -252,5 +292,57 @@ func TestSetAt(t *testing.T) {
 	err = dynSeq.SetAt(outOfBoundsIdx, valToBeInserted)
 	if err == nil {
 		t.Fatalf("This index %v shoule be out of bounds", outOfBoundsIdx)
+	}
+}
+
+func TestInsertAt(t *testing.T) {
+	dynSeq := &dynamicsequence.DynamicSequence[int]{}
+	starterLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	idx := 2
+	valToBeInserted := 11
+	newLen, err := dynSeq.InsertAt(idx, valToBeInserted)
+	if err != nil {
+		t.Fatalf("this index should be within the bonuds of the slice %v, %e", idx, err)
+	}
+
+	val, err := dynSeq.GetAt(idx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if val != valToBeInserted {
+		t.Fatalf("val %v does not mathc val to be inserted %v", val, valToBeInserted)
+	}
+
+	if starterLen >= newLen {
+		t.Fatalf("Failed to inser at, length should be larger, starter %v new %v", starterLen, newLen)
+	}
+}
+
+func TestInsertAtInLoop(t *testing.T) {
+	dynSeq := &dynamicsequence.DynamicSequence[int]{}
+	starterLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	idx := 2
+	for i := range starterLen {
+		_, err := dynSeq.InsertAt(idx, i+1)
+		if err != nil {
+			t.Fatalf("this index should be within the bonuds of the slice %v, %e", idx, err)
+		}
+	}
+
+	val, err := dynSeq.GetAt(idx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if val != starterLen {
+		t.Fatalf("val %v does not match val to be inserted %v", val, starterLen)
 	}
 }
