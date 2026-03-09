@@ -42,13 +42,11 @@ func TestUpSizeAndInsertFirst(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
 	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
 
-	valToBeInserted := 1
-
 	oldCap := dynSeq.Cap()
 	oldLen := dynSeq.Len()
 
-	for range dynSeq.Len() {
-		dynSeq.InsertFirst(valToBeInserted)
+	for i := range dynSeq.Len() {
+		dynSeq.InsertFirst(i + 1)
 	}
 
 	newLen := dynSeq.Len()
@@ -67,17 +65,17 @@ func TestUpSizeAndInsertFirst(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if first != valToBeInserted {
-		t.Fatalf("the first value %v does not match what was inserted %v", first, valToBeInserted)
+	if first != oldLen {
+		t.Fatalf("the first value %v does not match what was inserted %v", first, oldLen)
 	}
 
 	getFirst := dynSeq.GetFirst()
-	if getFirst != valToBeInserted {
-		t.Fatalf("the first value %v does not match what was inserted %v", first, valToBeInserted)
+	if getFirst != oldLen {
+		t.Fatalf("the first value %v does not match what was inserted %v getFirst", first, oldLen)
 	}
 
 	for i := range dynSeq.Len() {
-		dynSeq.InsertFirst(i)
+		dynSeq.InsertFirst(i + 1)
 	}
 	seoondNewCap := dynSeq.Cap()
 
@@ -145,13 +143,11 @@ func TestInseertLastAndGetLast(t *testing.T) {
 	dynSeq := &dynamicsequence.DynamicSequence[int]{}
 	dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
 
-	valToBeInserted := 1
-
 	oldCap := dynSeq.Cap()
 	oldLen := dynSeq.Len()
 
-	for range dynSeq.Len() {
-		dynSeq.InsertLast(valToBeInserted)
+	for i := range dynSeq.Len() {
+		dynSeq.InsertLast(i + 1)
 	}
 
 	newLen := dynSeq.Len()
@@ -170,13 +166,13 @@ func TestInseertLastAndGetLast(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if last != valToBeInserted {
-		t.Fatalf("the first value %v does not match what was inserted %v", last, valToBeInserted)
+	if last != oldLen {
+		t.Fatalf("the first value %v does not match what was inserted %v", last, oldLen)
 	}
 
 	getLast := dynSeq.GetLast()
-	if getLast != valToBeInserted {
-		t.Fatalf("the first value %v does not match what was inserted %v", getLast, valToBeInserted)
+	if getLast != oldLen {
+		t.Fatalf("the first value %v does not match what was inserted %v", getLast, oldLen)
 	}
 }
 

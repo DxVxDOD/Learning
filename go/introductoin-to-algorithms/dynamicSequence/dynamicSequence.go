@@ -118,13 +118,14 @@ func (d *DynamicSequence[T]) InsertFirst(val T) int {
 		return d.length
 	}
 
-	if d.length >= d.capacity/2 {
+	d.length++
+	d.start--
+
+	if d.start <= 0 {
 		d.upSize()
 	}
 
-	d.start--
 	d.dynSeq[d.start] = val
-	d.length++
 
 	return d.length
 }
@@ -154,14 +155,13 @@ func (d *DynamicSequence[T]) InsertLast(val T) int {
 		return d.length
 	}
 
-	tippingPoint := d.capacity - (d.capacity / 3)
-
-	if d.length+1 >= tippingPoint {
+	d.length++
+	if d.end >= d.capacity-1 {
 		d.upSize()
 	}
+
 	d.dynSeq[d.end] = val
 	d.end++
-	d.length++
 
 	return d.length
 }
