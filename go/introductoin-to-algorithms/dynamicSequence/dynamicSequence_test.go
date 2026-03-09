@@ -321,6 +321,34 @@ func TestInsertAt(t *testing.T) {
 	if starterLen >= newLen {
 		t.Fatalf("Failed to inser at, length should be larger, starter %v new %v", starterLen, newLen)
 	}
+
+	startIdx := 0
+	startVal := 1234
+	_, err = dynSeq.InsertAt(startIdx, startVal)
+	if err != nil {
+		t.Fatalf("this index should be within the bonuds of the slice %v, %e", idx, err)
+	}
+	first, err := dynSeq.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if first != startVal {
+		t.Fatalf("GetFirst %v did not match the inserted value %v", first, startVal)
+	}
+
+	lastIdx := dynSeq.Len()
+	lastVal := 9999
+	_, err = dynSeq.InsertAt(lastIdx, lastVal)
+	if err != nil {
+		t.Fatalf("this index should be within the bonuds of the slice %v, %e", idx, err)
+	}
+	last, err := dynSeq.GetLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if last != lastVal {
+		t.Fatalf("GetLast %v did not match the inserted value %v", last, lastVal)
+	}
 }
 
 func TestInsertAtInLoop(t *testing.T) {

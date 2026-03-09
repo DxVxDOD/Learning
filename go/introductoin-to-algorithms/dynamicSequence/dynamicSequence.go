@@ -212,17 +212,25 @@ func (d *DynamicSequence[T]) InsertAt(idx int, val T) (int, error) {
 		return l, nil
 	}
 
-	if idx >= d.length || idx < 0 {
+	if idx > d.length || idx < 0 {
 		return 0, errors.New("index out of bounds")
 	}
-
-	d.length++
 
 	if d.end >= d.capacity-1 {
 		d.upSize()
 	}
 
 	realIdx := idx + d.start
+
+	if realIdx == d.end {
+		return d.InsertLast(val)
+	}
+	if realIdx == d.start {
+		return d.InsertFirst(val)
+	}
+
+	d.length++
+
 	t1 := d.dynSeq[realIdx]
 	d.dynSeq[realIdx] = val
 
