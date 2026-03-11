@@ -374,3 +374,54 @@ func TestInsertAtInLoop(t *testing.T) {
 		t.Fatalf("val %v does not match val to be inserted %v", val, starterLen)
 	}
 }
+
+func TestInsertAtWithTheEnd(t *testing.T) {
+	dynSeq := &dynamicsequence.DynamicSequence[int]{}
+	starterLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	idx := starterLen
+	for i := range starterLen {
+		idx = dynSeq.Len()
+		_, err := dynSeq.InsertAt(idx, i+1)
+		if err != nil {
+			t.Fatalf("this index should be within the bonuds of the slice %v, %e", idx, err)
+		}
+	}
+
+	val, err := dynSeq.GetAt(idx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if val != starterLen {
+		t.Fatalf("val %v does not match val to be inserted %v", val, starterLen)
+	}
+}
+
+func TestInsertAtWithTheBegining(t *testing.T) {
+	dynSeq := &dynamicsequence.DynamicSequence[int]{}
+	starterLen, err := dynSeq.Build([]int{10, 20, 30, 40, 50, 60, 70, 80})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	idx := 0
+	lastInserted := 0
+	for i := range starterLen {
+		_, err := dynSeq.InsertAt(idx, i+1)
+		if err != nil {
+			t.Fatalf("this index should be within the bonuds of the slice %v, %e", idx, err)
+		}
+		lastInserted = i + 1
+	}
+
+	val, err := dynSeq.GetAt(idx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if val != lastInserted {
+		t.Fatalf("val %v does not match val to be inserted %v", val, lastInserted)
+	}
+}
