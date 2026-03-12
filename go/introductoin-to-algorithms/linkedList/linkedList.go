@@ -12,14 +12,27 @@ type Linkedlist[T any] struct {
 	length int
 }
 
-func (l *Linkedlist[T]) Build(arr []T) *Linkedlist[T] {
-	var nextNode *Linkedlist[T]
+func (l *Linkedlist[T]) walkFromStartToEnd() *Linkedlist[T] {
+	lastNode := l.Head
+	for lastNode.next != nil {
+		lastNode = lastNode.next
+	}
+	return lastNode
+}
 
-	l.Item = arr[0]
+func (l *Linkedlist[T]) init(val T) *Linkedlist[T] {
+	newNode := &Linkedlist[T]{Item: val}
+
+	l = newNode
+	l.Head = newNode
 	l.length = 1
 
-	nextNode = l
-	nextNode.Head = l
+	return newNode
+}
+
+func (l *Linkedlist[T]) Build(arr []T) *Linkedlist[T] {
+	nextNode := l.init(arr[0])
+	nextNode.Head = nextNode
 
 	arrLen := len(arr)
 	for i := 1; i < arrLen; i++ {
@@ -47,12 +60,15 @@ func (l *Linkedlist[T]) Len() int {
 	return l.length
 }
 
-func (l *Linkedlist[T]) init(val T) *Linkedlist[T] {
-	newNode := &Linkedlist[T]{Item: val}
-	l = newNode
-	l.Head = newNode
-	l.length = 1
-	return newNode
+func (l *Linkedlist[T]) GetLast() *Linkedlist[T] {
+	if l == nil {
+		var zero T
+		return l.init(zero)
+	}
+
+	lastNode := l.walkFromStartToEnd()
+
+	return lastNode
 }
 
 func (l *Linkedlist[T]) InsertLast(val T) *Linkedlist[T] {
@@ -65,27 +81,10 @@ func (l *Linkedlist[T]) InsertLast(val T) *Linkedlist[T] {
 	newNode.Head = l.Head
 	newNode.Head.length = newNode.length
 
-	lastNode := l.Head
-	for lastNode.next != nil {
-		lastNode = lastNode.next
-	}
+	lastNode := l.walkFromStartToEnd()
 
 	lastNode.next = newNode
 	return newNode
-}
-
-func (l *Linkedlist[T]) GetLast() *Linkedlist[T] {
-	if l == nil {
-		var zero T
-		return l.init(zero)
-	}
-
-	lastNode := l.Head
-	for lastNode.next != nil {
-		lastNode = lastNode.next
-	}
-
-	return lastNode
 }
 
 func (l *Linkedlist[T]) DeleteLast() (*Linkedlist[T], error) {
