@@ -76,14 +76,15 @@ func (l *Linkedlist[T]) InsertLast(val T) *Linkedlist[T] {
 		return l.init(val)
 	}
 
+	l.length++
+	l.head.length = l.length
+
 	newNode := &Linkedlist[T]{Item: val}
-	newNode.length = l.length + 1
+	newNode.length = l.length
 	newNode.head = l.head
 
 	lastNode := l.walkFromStartToEnd()
 	lastNode.next = newNode
-
-	// l.length++
 
 	return newNode
 }
@@ -101,6 +102,9 @@ func (l *Linkedlist[T]) DeleteLast() (*Linkedlist[T], error) {
 	nodeToBeDeleted := penultimNode.next
 
 	penultimNode.next = nil
+
+	l.length--
+	l.head.length = l.length
 
 	return nodeToBeDeleted, nil
 }
@@ -124,7 +128,9 @@ func (l *Linkedlist[T]) InsertFirst(val T) *Linkedlist[T] {
 	newHead.head = newHead
 
 	l.head = newHead
+
 	l.length++
+	l.head.length = l.length
 
 	return newHead
 }
@@ -139,6 +145,7 @@ func (l *Linkedlist[T]) DeleteFirst() (*Linkedlist[T], error) {
 
 	l.head = secondNode
 	l.length--
+	l.head.length = l.length
 
 	return nodeToBeDeleted, nil
 }
