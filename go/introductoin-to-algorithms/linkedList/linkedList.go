@@ -79,11 +79,12 @@ func (l *Linkedlist[T]) InsertLast(val T) *Linkedlist[T] {
 	newNode := &Linkedlist[T]{Item: val}
 	newNode.length = l.length + 1
 	newNode.head = l.head
-	newNode.head.length = newNode.length
 
 	lastNode := l.walkFromStartToEnd()
-
 	lastNode.next = newNode
+
+	// l.length++
+
 	return newNode
 }
 
@@ -119,13 +120,25 @@ func (l *Linkedlist[T]) InsertFirst(val T) *Linkedlist[T] {
 
 	newHead := &Linkedlist[T]{Item: val}
 	secondNode := l.head
-
-	newHead.length = l.length + 1
 	newHead.next = secondNode
 	newHead.head = newHead
 
 	l.head = newHead
-	l.length = newHead.length
+	l.length++
 
 	return newHead
+}
+
+func (l *Linkedlist[T]) DeleteFirst() (*Linkedlist[T], error) {
+	if l == nil {
+		return nil, errors.New("cannot delete from an empty linked list")
+	}
+
+	nodeToBeDeleted := l.head
+	secondNode := nodeToBeDeleted.next
+
+	l.head = secondNode
+	l.length--
+
+	return nodeToBeDeleted, nil
 }

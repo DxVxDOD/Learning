@@ -1,7 +1,6 @@
 package linkedlist_test
 
 import (
-	"fmt"
 	"slices"
 	"testing"
 
@@ -120,9 +119,17 @@ func TestInsertFirst(t *testing.T) {
 	all := lL.GetAll()
 	first := all[0]
 
-	fmt.Println(all)
-
 	if first != newHeadItem {
+		t.Fatalf("first %v should equal newHeadItem %v", first, newHeadItem)
+	}
+
+	getFirst, err := lL.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+	getFirstItem := getFirst.Item
+
+	if getFirstItem != newHeadItem {
 		t.Fatalf("first %v should equal newHeadItem %v", first, newHeadItem)
 	}
 }
