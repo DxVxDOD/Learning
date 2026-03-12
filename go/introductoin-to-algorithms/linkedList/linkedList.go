@@ -111,3 +111,21 @@ func (l *Linkedlist[T]) GetFirst() (*Linkedlist[T], error) {
 
 	return l.head, nil
 }
+
+func (l *Linkedlist[T]) InsertFirst(val T) *Linkedlist[T] {
+	if l == nil {
+		return l.init(val)
+	}
+
+	newHead := &Linkedlist[T]{Item: val}
+	secondNode := l.head
+
+	newHead.length = l.length + 1
+	newHead.next = secondNode
+	newHead.head = newHead
+
+	l.head = newHead
+	l.length = newHead.length
+
+	return newHead
+}

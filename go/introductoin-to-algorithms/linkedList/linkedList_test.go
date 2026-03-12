@@ -1,6 +1,7 @@
 package linkedlist_test
 
 import (
+	"fmt"
 	"slices"
 	"testing"
 
@@ -105,5 +106,23 @@ func TestDeleteLast(t *testing.T) {
 
 	if newLastNodeItem+1 != deletedNodeItem {
 		t.Fatalf("The new las item %v should be smaller by (per tests logic) the deleted node item %v", newLastNodeItem, deletedNodeItem)
+	}
+}
+
+func TestInsertFirst(t *testing.T) {
+	starter := linkedlist.Linkedlist[int]{}
+	lL := starter.Build([]int{1, 2, 3, 4})
+
+	valToBeInserted := 10
+	newHead := lL.InsertFirst(valToBeInserted)
+	newHeadItem := newHead.Item
+
+	all := lL.GetAll()
+	first := all[0]
+
+	fmt.Println(all)
+
+	if first != newHeadItem {
+		t.Fatalf("first %v should equal newHeadItem %v", first, newHeadItem)
 	}
 }
