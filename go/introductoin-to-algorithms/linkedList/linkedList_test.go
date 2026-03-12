@@ -37,7 +37,7 @@ func TestInsertLast(t *testing.T) {
 	lL.InsertLast(valToBeInserted)
 
 	all := lL.GetAll()
-	last := all[lL.Head.Len()-1]
+	last := all[lL.Len()-1]
 
 	if last != valToBeInserted {
 		t.Fatalf("The last value in all should %v equal valToBeInserted %v", last, valToBeInserted)
@@ -49,7 +49,7 @@ func TestInsertLast(t *testing.T) {
 	}
 
 	allLoop := lL.GetAll()
-	lastLoop := allLoop[lL.Head.Len()-1]
+	lastLoop := allLoop[lL.Len()-1]
 
 	if lastLoop != lRange {
 		t.Fatalf("The last value %v in allLoop should equal lRange %v", lastLoop, lRange)

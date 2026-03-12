@@ -8,12 +8,12 @@ import (
 type Linkedlist[T any] struct {
 	Item   T
 	next   *Linkedlist[T]
-	Head   *Linkedlist[T]
+	head   *Linkedlist[T]
 	length int
 }
 
 func (l *Linkedlist[T]) walkFromStartToEnd() *Linkedlist[T] {
-	lastNode := l.Head
+	lastNode := l.head
 	for lastNode.next != nil {
 		lastNode = lastNode.next
 	}
@@ -24,7 +24,7 @@ func (l *Linkedlist[T]) init(val T) *Linkedlist[T] {
 	newNode := &Linkedlist[T]{Item: val}
 
 	l = newNode
-	l.Head = newNode
+	l.head = newNode
 	l.length = 1
 
 	return newNode
@@ -32,19 +32,19 @@ func (l *Linkedlist[T]) init(val T) *Linkedlist[T] {
 
 func (l *Linkedlist[T]) Build(arr []T) *Linkedlist[T] {
 	nextNode := l.init(arr[0])
-	nextNode.Head = nextNode
+	nextNode.head = nextNode
 
 	arrLen := len(arr)
 	for i := 1; i < arrLen; i++ {
 		nextNode = nextNode.InsertLast(arr[i])
 	}
 
-	return nextNode.Head
+	return nextNode.head
 }
 
 func (l *Linkedlist[T]) GetAll() []T {
 	all := make([]T, l.length)
-	nextNode := l.Head
+	nextNode := l.head
 
 	i := 0
 	for nextNode != nil {
@@ -78,8 +78,8 @@ func (l *Linkedlist[T]) InsertLast(val T) *Linkedlist[T] {
 
 	newNode := &Linkedlist[T]{Item: val}
 	newNode.length = l.length + 1
-	newNode.Head = l.Head
-	newNode.Head.length = newNode.length
+	newNode.head = l.head
+	newNode.head.length = newNode.length
 
 	lastNode := l.walkFromStartToEnd()
 
@@ -92,7 +92,7 @@ func (l *Linkedlist[T]) DeleteLast() (*Linkedlist[T], error) {
 		return nil, errors.New("cannot delete from an empty linked list")
 	}
 
-	penultimNode := l.Head
+	penultimNode := l.head
 	for penultimNode.next.next != nil {
 		penultimNode = penultimNode.next
 	}
@@ -104,16 +104,10 @@ func (l *Linkedlist[T]) DeleteLast() (*Linkedlist[T], error) {
 	return nodeToBeDeleted, nil
 }
 
-// func (l *Linkedlist[T]) GetAt(idx int) (T, error) {
-// 	var link *Linkedlist[T]
-//
-// 	for range idx {
-// 		link = l.next
-// 		if link == nil {
-// 			var zero T
-// 			return zero, errors.New("index out of range")
-// 		}
-// 	}
-//
-// 	return link.Item, nil
-// }
+func (l *Linkedlist[T]) GetFirst() (*Linkedlist[T], error) {
+	if l == nil {
+		return nil, errors.New("cannot GetFirst on an empty linked list")
+	}
+
+	return l.head, nil
+}
