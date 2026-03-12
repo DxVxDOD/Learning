@@ -55,3 +55,20 @@ func TestInsertLast(t *testing.T) {
 		t.Fatalf("The last value %v in allLoop should equal lRange %v", lastLoop, lRange)
 	}
 }
+
+func TestGetLast(t *testing.T) {
+	starter := linkedlist.Linkedlist[int]{}
+	lL := starter.Build([]int{1})
+
+	lRange := 13
+	for i := range lRange {
+		lL.InsertLast(i + 1)
+	}
+
+	lastNode := lL.GetLast()
+	lastValue := lastNode.Item
+
+	if lRange != lastValue {
+		t.Fatalf("The last value %v should equal lRange %v", lastValue, lRange)
+	}
+}

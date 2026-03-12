@@ -70,6 +70,20 @@ func (l *Linkedlist[T]) InsertLast(val T) *Linkedlist[T] {
 	return newNode
 }
 
+func (l *Linkedlist[T]) GetLast() *Linkedlist[T] {
+	if l == nil {
+		var zero T
+		return l.init(zero)
+	}
+
+	lastNode := l.Head
+	for lastNode.next != nil {
+		lastNode = lastNode.next
+	}
+
+	return lastNode
+}
+
 // func (l *Linkedlist[T]) GetAt(idx int) (T, error) {
 // 	var link *Linkedlist[T]
 //
