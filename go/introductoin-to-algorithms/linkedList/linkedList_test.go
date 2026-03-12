@@ -72,3 +72,38 @@ func TestGetLast(t *testing.T) {
 		t.Fatalf("The last value %v should equal lRange %v", lastValue, lRange)
 	}
 }
+
+func TestDeleteLast(t *testing.T) {
+	starter := linkedlist.Linkedlist[int]{}
+	lL := starter.Build([]int{1})
+
+	lRange := 13
+	for i := range lRange {
+		lL.InsertLast(i + 1)
+	}
+
+	lastNode := lL.GetLast()
+	lastValue := lastNode.Item
+
+	if lRange != lastValue {
+		t.Fatalf("The last value %v should equal lRange %v", lastValue, lRange)
+	}
+
+	deletedNode, err := lL.DeleteLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	newLastNode := lL.GetLast()
+
+	newLastNodeItem := newLastNode.Item
+	deletedNodeItem := deletedNode.Item
+
+	if newLastNodeItem == deletedNodeItem {
+		t.Fatalf("The new las item %v should equal the deleted node item %v", newLastNodeItem, deletedNodeItem)
+	}
+
+	if newLastNodeItem+1 != deletedNodeItem {
+		t.Fatalf("The new las item %v should be smaller by (per tests logic) the deleted node item %v", newLastNodeItem, deletedNodeItem)
+	}
+}

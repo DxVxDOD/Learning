@@ -1,6 +1,10 @@
 // Package linkedlist respresentes a data structure called linked lists. This data structure is sequential but not contiguous in memory.
 package linkedlist
 
+import (
+	"errors"
+)
+
 type Linkedlist[T any] struct {
 	Item   T
 	next   *Linkedlist[T]
@@ -82,6 +86,23 @@ func (l *Linkedlist[T]) GetLast() *Linkedlist[T] {
 	}
 
 	return lastNode
+}
+
+func (l *Linkedlist[T]) DeleteLast() (*Linkedlist[T], error) {
+	if l == nil {
+		return nil, errors.New("cannot delete from an empty linked list")
+	}
+
+	penultimNode := l.Head
+	for penultimNode.next.next != nil {
+		penultimNode = penultimNode.next
+	}
+
+	nodeToBeDeleted := penultimNode.next
+
+	penultimNode.next = nil
+
+	return nodeToBeDeleted, nil
 }
 
 // func (l *Linkedlist[T]) GetAt(idx int) (T, error) {
