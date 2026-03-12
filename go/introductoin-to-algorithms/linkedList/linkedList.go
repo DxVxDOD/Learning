@@ -20,6 +20,21 @@ func (l *Linkedlist[T]) walkFromStartToEnd() *Linkedlist[T] {
 	return lastNode
 }
 
+func (l *Linkedlist[T]) walkTo(idx int) (*Linkedlist[T], error) {
+	if idx > l.length {
+		return nil, errors.New("index out of bounds")
+	}
+
+	nodeAtIdx := l.head
+	i := 0
+
+	for nodeAtIdx.next != nil && i < idx {
+		nodeAtIdx = nodeAtIdx.next
+		i++
+	}
+	return nodeAtIdx, nil
+}
+
 func (l *Linkedlist[T]) init(val T) *Linkedlist[T] {
 	newNode := &Linkedlist[T]{Item: val}
 
@@ -154,17 +169,38 @@ func (l *Linkedlist[T]) GetAt(idx int) (*Linkedlist[T], error) {
 	if l == nil {
 		return nil, errors.New("cannot GetAt on an empty linked list")
 	}
-	nodeAtIdx := l.head
-	i := 0
 
-	if idx > l.length {
-		return nil, errors.New("index out of bounds")
+	return l.walkTo(idx)
+}
+
+func (l *Linkedlist[T]) InsertAt(val T, idx int) (*Linkedlist[T], error) {
+	if l == nil {
+		return nil, errors.New("cannot insert at in an empty linked list")
 	}
 
-	for nodeAtIdx.next != nil && i <= idx {
-		nodeAtIdx = nodeAtIdx.next
-		i++
+	nodeAtIdx, err := l.walkTo(idx - 1)
+	if err != nil {
+		return nil, err
 	}
+
+	if idx == l.length {
+		return l.InsertLast(val), nil
+	}
+	if idx == 0 {
+		return l.InsertFirst(val), nil
+	}
+
+	nextNode := nodeAtIdx.next
+
+	l.length++
+	l.head.length = l.length
+
+	newNode := &Linkedlist[T]{Item: val}
+	newNode.length = l.length
+	newNode.head = l.head
+	newNode.next = nextNode
+
+	nodeAtIdx.next = newNode
 
 	return nodeAtIdx, nil
 }

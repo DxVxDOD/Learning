@@ -1,6 +1,7 @@
 package linkedlist_test
 
 import (
+	"fmt"
 	"slices"
 	"testing"
 
@@ -144,7 +145,7 @@ func TestGetAt(t *testing.T) {
 	}
 
 	linkItemAtIdx := linkAtIdx.Item
-	expectedValue := 5
+	expectedValue := 4
 	if linkItemAtIdx != expectedValue {
 		t.Fatalf("valAtIdx %v does not match the expected value %v", linkItemAtIdx, expectedValue)
 	}
@@ -152,5 +153,36 @@ func TestGetAt(t *testing.T) {
 	_, err = lL.GetAt(10)
 	if err == nil {
 		t.Fatal("this Should be index out of bounds")
+	}
+}
+
+func TestInsertAt(t *testing.T) {
+	starter := linkedlist.Linkedlist[int]{}
+	lL := starter.Build([]int{1, 2})
+
+	for i := range 5 {
+		_, err := lL.InsertAt(i+1, i)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	all := lL.GetAll()
+
+	if !slices.Contains(all, 5) {
+		t.Fatal("should contain 5")
+	}
+
+	_, err := lL.InsertAt(11, 4)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(lL.GetAll())
+	valAt, err := lL.GetAt(4)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if valAt.Item != 11 {
+		t.Fatalf("valAt %v should equal 11", valAt.Item)
 	}
 }
