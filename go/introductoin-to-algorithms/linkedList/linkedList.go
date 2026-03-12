@@ -204,3 +204,30 @@ func (l *Linkedlist[T]) InsertAt(val T, idx int) (*Linkedlist[T], error) {
 
 	return nodeAtIdx, nil
 }
+
+func (l *Linkedlist[T]) DeleteAt(idx int) (*Linkedlist[T], error) {
+	if l == nil {
+		return nil, errors.New("cannot delete from an empty linked list")
+	}
+
+	previousNode, err := l.walkTo(idx - 2)
+	if err != nil {
+		return nil, err
+	}
+
+	if idx == l.length {
+		return l.DeleteLast()
+	}
+	if idx == 0 {
+		return l.DeleteFirst()
+	}
+
+	l.length--
+	l.head.length = l.length
+
+	nodeToBeDeleted := previousNode.next
+	nextNode := nodeToBeDeleted.next
+	previousNode.next = nextNode
+
+	return nodeToBeDeleted, nil
+}

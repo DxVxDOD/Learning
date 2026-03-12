@@ -1,7 +1,6 @@
 package linkedlist_test
 
 import (
-	"fmt"
 	"slices"
 	"testing"
 
@@ -177,12 +176,28 @@ func TestInsertAt(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(lL.GetAll())
+
 	valAt, err := lL.GetAt(4)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if valAt.Item != 11 {
 		t.Fatalf("valAt %v should equal 11", valAt.Item)
+	}
+}
+
+func TestDeleteAt(t *testing.T) {
+	starter := linkedlist.Linkedlist[int]{}
+	lL := starter.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
+
+	_, err := lL.DeleteAt(3)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	all := lL.GetAll()
+
+	if slices.Contains(all, 3) {
+		t.Fatal("The linked list should not contain 3")
 	}
 }
