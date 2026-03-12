@@ -10,15 +10,19 @@ type Linkedlist[T any] struct {
 
 func (l *Linkedlist[T]) Build(arr []T) *Linkedlist[T] {
 	var nextNode *Linkedlist[T]
+
 	l.Item = arr[0]
 	l.length = 1
+
 	nextNode = l
 	nextNode.Head = l
+
 	arrLen := len(arr)
 	for i := 1; i < arrLen; i++ {
-		nextNode = nextNode.Add(arr[i])
+		nextNode = nextNode.InsertLast(arr[i])
 	}
-	return nextNode
+
+	return nextNode.Head
 }
 
 func (l *Linkedlist[T]) GetAll() []T {
@@ -47,7 +51,7 @@ func (l *Linkedlist[T]) init(val T) *Linkedlist[T] {
 	return newNode
 }
 
-func (l *Linkedlist[T]) Add(val T) *Linkedlist[T] {
+func (l *Linkedlist[T]) InsertLast(val T) *Linkedlist[T] {
 	if l == nil {
 		return l.init(val)
 	}
@@ -55,7 +59,14 @@ func (l *Linkedlist[T]) Add(val T) *Linkedlist[T] {
 	newNode := &Linkedlist[T]{Item: val}
 	newNode.length = l.length + 1
 	newNode.Head = l.Head
-	l.next = newNode
+	newNode.Head.length = newNode.length
+
+	lastNode := l.Head
+	for lastNode.next != nil {
+		lastNode = lastNode.next
+	}
+
+	lastNode.next = newNode
 	return newNode
 }
 
