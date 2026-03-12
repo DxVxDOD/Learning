@@ -189,6 +189,7 @@ func TestInsertAt(t *testing.T) {
 func TestDeleteAt(t *testing.T) {
 	starter := linkedlist.Linkedlist[int]{}
 	lL := starter.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	starterLen := lL.Len()
 
 	_, err := lL.DeleteAt(3)
 	if err != nil {
@@ -199,5 +200,16 @@ func TestDeleteAt(t *testing.T) {
 
 	if slices.Contains(all, 3) {
 		t.Fatal("The linked list should not contain 3")
+	}
+
+	afterLen := lL.Len()
+
+	if starterLen == afterLen {
+		t.Fatalf("starterLen %v should not equal afterLen %v", starterLen, afterLen)
+	}
+
+	diff := starterLen - afterLen
+	if diff != 1 {
+		t.Fatalf("The diff %v should be 1", diff)
 	}
 }
