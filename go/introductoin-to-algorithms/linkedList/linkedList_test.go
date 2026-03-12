@@ -133,3 +133,24 @@ func TestInsertFirst(t *testing.T) {
 		t.Fatalf("first %v should equal newHeadItem %v", first, newHeadItem)
 	}
 }
+
+func TestGetAt(t *testing.T) {
+	starter := linkedlist.Linkedlist[int]{}
+	lL := starter.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
+
+	linkAtIdx, err := lL.GetAt(3)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	linkItemAtIdx := linkAtIdx.Item
+	expectedValue := 5
+	if linkItemAtIdx != expectedValue {
+		t.Fatalf("valAtIdx %v does not match the expected value %v", linkItemAtIdx, expectedValue)
+	}
+
+	_, err = lL.GetAt(10)
+	if err == nil {
+		t.Fatal("this Should be index out of bounds")
+	}
+}

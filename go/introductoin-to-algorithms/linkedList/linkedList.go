@@ -149,3 +149,22 @@ func (l *Linkedlist[T]) DeleteFirst() (*Linkedlist[T], error) {
 
 	return nodeToBeDeleted, nil
 }
+
+func (l *Linkedlist[T]) GetAt(idx int) (*Linkedlist[T], error) {
+	if l == nil {
+		return nil, errors.New("cannot GetAt on an empty linked list")
+	}
+	nodeAtIdx := l.head
+	i := 0
+
+	if idx > l.length {
+		return nil, errors.New("index out of bounds")
+	}
+
+	for nodeAtIdx.next != nil && i <= idx {
+		nodeAtIdx = nodeAtIdx.next
+		i++
+	}
+
+	return nodeAtIdx, nil
+}
