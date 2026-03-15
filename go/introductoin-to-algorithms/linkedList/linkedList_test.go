@@ -65,11 +65,10 @@ func TestGetLast(t *testing.T) {
 		lL.InsertLast(i + 1)
 	}
 
-	lastNode, err := lL.GetLast()
+	lastValue, err := lL.GetLast()
 	if err != nil {
 		t.Fatal(err)
 	}
-	lastValue := lastNode.Item
 
 	if lRange != lastValue {
 		t.Fatalf("The last value %v should equal lRange %v", lastValue, lRange)
@@ -85,28 +84,24 @@ func TestDeleteLast(t *testing.T) {
 		lL.InsertLast(i + 1)
 	}
 
-	lastNode, err := lL.GetLast()
+	lastValue, err := lL.GetLast()
 	if err != nil {
 		t.Fatal(err)
 	}
-	lastValue := lastNode.Item
 
 	if lRange != lastValue {
 		t.Fatalf("The last value %v should equal lRange %v", lastValue, lRange)
 	}
 
-	deletedNode, err := lL.DeleteLast()
+	deletedNodeItem, err := lL.DeleteLast()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	newLastNode, err := lL.GetLast()
+	newLastNodeItem, err := lL.GetLast()
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	newLastNodeItem := newLastNode.Item
-	deletedNodeItem := deletedNode.Item
 
 	if newLastNodeItem == deletedNodeItem {
 		t.Fatalf("The new las item %v should equal the deleted node item %v", newLastNodeItem, deletedNodeItem)
@@ -123,11 +118,10 @@ func TestInsertFirst(t *testing.T) {
 
 	valToBeInserted := 10
 	lL.InsertFirst(valToBeInserted)
-	newHead, err := lL.GetFirst()
+	newHeadItem, err := lL.GetFirst()
 	if err != nil {
 		t.Fatal(err)
 	}
-	newHeadItem := newHead.Item
 
 	all := lL.GetAll()
 	first := all[0]
@@ -136,11 +130,10 @@ func TestInsertFirst(t *testing.T) {
 		t.Fatalf("first %v should equal newHeadItem %v", first, newHeadItem)
 	}
 
-	getFirst, err := lL.GetFirst()
+	getFirstItem, err := lL.GetFirst()
 	if err != nil {
 		t.Fatal(err)
 	}
-	getFirstItem := getFirst.Item
 
 	if getFirstItem != newHeadItem {
 		t.Fatalf("first %v should equal newHeadItem %v", first, newHeadItem)
@@ -151,12 +144,11 @@ func TestGetAt(t *testing.T) {
 	lL := linkedlist.Linkedlist[int]{}
 	lL.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
 
-	linkAtIdx, err := lL.GetAt(3)
+	linkItemAtIdx, err := lL.GetAt(3)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	linkItemAtIdx := linkAtIdx.Item
 	expectedValue := 4
 	if linkItemAtIdx != expectedValue {
 		t.Fatalf("valAtIdx %v does not match the expected value %v", linkItemAtIdx, expectedValue)
@@ -194,8 +186,8 @@ func TestInsertAt(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if valAt.Item != 11 {
-		t.Fatalf("valAt %v should equal 11", valAt.Item)
+	if valAt != 11 {
+		t.Fatalf("valAt %v should equal 11", valAt)
 	}
 }
 
@@ -211,7 +203,7 @@ func TestDeleteAt(t *testing.T) {
 
 	all := lL.GetAll()
 
-	if slices.Contains(all, 3) {
+	if slices.Contains(all, 4) {
 		t.Fatal("The linked list should not contain 3")
 	}
 
