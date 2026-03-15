@@ -133,6 +133,14 @@ func (l *Linkedlist[T]) DeleteFirst() (T, error) {
 		return *new(T), errors.New("cannot delete from an empty linked list")
 	}
 
+	if l.length == 1 {
+		nodeToBeDeleted := l.head
+		l.tail = nil
+		l.head = nil
+		l.length--
+		return nodeToBeDeleted.item, nil
+	}
+
 	oldHead := l.head
 	l.head = oldHead.next
 	oldHead.next = nil
@@ -195,6 +203,10 @@ func (l *Linkedlist[T]) InsertAt(val T, idx int) error {
 func (l *Linkedlist[T]) DeleteAt(idx int) (T, error) {
 	if l.head == nil {
 		return *new(T), errors.New("cannot delete from an empty linked list")
+	}
+
+	if idx < 0 || idx > l.length {
+		return *new(T), errors.New("index out of bounds")
 	}
 
 	if idx == l.length-1 {
