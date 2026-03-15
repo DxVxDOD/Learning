@@ -6,22 +6,18 @@ import (
 )
 
 type Linkedlist[T any] struct {
-	Item   T
-	next   *Linkedlist[T]
-	head   *Linkedlist[T]
+	head   *node[T]
+	tail   *node[T]
 	length int
 }
 
-func (l *Linkedlist[T]) walkFromStartToEnd() *Linkedlist[T] {
-	lastNode := l.head
-	for lastNode.next != nil {
-		lastNode = lastNode.next
-	}
-	return lastNode
+type node[T any] struct {
+	Item T
+	next *node[T]
 }
 
-func (l *Linkedlist[T]) walkTo(idx int) (*Linkedlist[T], error) {
-	if idx > l.length {
+func (l *Linkedlist[T]) walkTo(idx int) (*node[T], error) {
+	if idx >= l.length || idx < 0 {
 		return nil, errors.New("index out of bounds")
 	}
 
@@ -35,26 +31,19 @@ func (l *Linkedlist[T]) walkTo(idx int) (*Linkedlist[T], error) {
 	return nodeAtIdx, nil
 }
 
-func (l *Linkedlist[T]) init(val T) *Linkedlist[T] {
-	newNode := &Linkedlist[T]{Item: val}
-
-	l = newNode
-	l.head = newNode
+func (l *Linkedlist[T]) init(val T) {
+	l.head = &node[T]{Item: val}
+	l.tail = &node[T]{Item: val}
 	l.length = 1
-
-	return newNode
 }
 
-func (l *Linkedlist[T]) Build(arr []T) *Linkedlist[T] {
-	nextNode := l.init(arr[0])
-	nextNode.head = nextNode
+func (l *Linkedlist[T]) Build(arr []T) {
+	// l.init(arr[0])
 
 	arrLen := len(arr)
 	for i := 1; i < arrLen; i++ {
-		nextNode = nextNode.InsertLast(arr[i])
+		l.InsertLast(arr[i])
 	}
-
-	return nextNode.head
 }
 
 func (l *Linkedlist[T]) GetAll() []T {
@@ -75,56 +64,45 @@ func (l *Linkedlist[T]) Len() int {
 	return l.length
 }
 
-func (l *Linkedlist[T]) GetLast() *Linkedlist[T] {
+func (l *Linkedlist[T]) GetLast() (*node[T], error) {
 	if l == nil {
-		var zero T
-		return l.init(zero)
+		return nil, errors.New("cannot call GetLast on an empty Linkedlist")
 	}
 
-	lastNode := l.walkFromStartToEnd()
-
-	return lastNode
+	return l.tail, nil
 }
 
-func (l *Linkedlist[T]) InsertLast(val T) *Linkedlist[T] {
-	if l == nil {
-		return l.init(val)
+func (l *Linkedlist[T]) InsertLast(val T) {
+	if l.tail == nil {
+		l.init(val)
+	} else {
+		oldTail := l.tail
+		l.tail = &node[T]{Item: val}
+		oldTail.next = l.tail
+		l.length++
 	}
-
-	l.length++
-	l.head.length = l.length
-
-	newNode := &Linkedlist[T]{Item: val}
-	newNode.length = l.length
-	newNode.head = l.head
-
-	lastNode := l.walkFromStartToEnd()
-	lastNode.next = newNode
-
-	return newNode
 }
 
-func (l *Linkedlist[T]) DeleteLast() (*Linkedlist[T], error) {
+func (l *Linkedlist[T]) DeleteLast() (*node[T], error) {
 	if l == nil {
 		return nil, errors.New("cannot delete from an empty linked list")
 	}
 
-	penultimNode := l.head
-	for penultimNode.next.next != nil {
-		penultimNode = penultimNode.next
+	penultimNode, err := l.walkTo(l.length - 2)
+	if err != nil {
+		return nil, err
 	}
 
-	nodeToBeDeleted := penultimNode.next
-
+	oldTail := penultimNode.next
 	penultimNode.next = nil
+	l.tail = penultimNode
 
 	l.length--
-	l.head.length = l.length
 
-	return nodeToBeDeleted, nil
+	return oldTail, nil
 }
 
-func (l *Linkedlist[T]) GetFirst() (*Linkedlist[T], error) {
+func (l *Linkedlist[T]) GetFirst() (*node[T], error) {
 	if l == nil {
 		return nil, errors.New("cannot GetFirst on an empty linked list")
 	}
@@ -132,40 +110,33 @@ func (l *Linkedlist[T]) GetFirst() (*Linkedlist[T], error) {
 	return l.head, nil
 }
 
-func (l *Linkedlist[T]) InsertFirst(val T) *Linkedlist[T] {
-	if l == nil {
-		return l.init(val)
+func (l *Linkedlist[T]) InsertFirst(val T) {
+	if l.head == nil {
+		l.init(val)
+	} else {
+		oldHead := l.head
+		l.head = &node[T]{Item: val}
+		l.head.next = oldHead
+
+		l.length++
 	}
-
-	newHead := &Linkedlist[T]{Item: val}
-	secondNode := l.head
-	newHead.next = secondNode
-	newHead.head = newHead
-
-	l.head = newHead
-
-	l.length++
-	l.head.length = l.length
-
-	return newHead
 }
 
-func (l *Linkedlist[T]) DeleteFirst() (*Linkedlist[T], error) {
+func (l *Linkedlist[T]) DeleteFirst() (*node[T], error) {
 	if l == nil {
 		return nil, errors.New("cannot delete from an empty linked list")
 	}
 
-	nodeToBeDeleted := l.head
-	secondNode := nodeToBeDeleted.next
+	oldHead := l.head
+	l.head = oldHead.next
+	oldHead.next = nil
 
-	l.head = secondNode
 	l.length--
-	l.head.length = l.length
 
-	return nodeToBeDeleted, nil
+	return oldHead, nil
 }
 
-func (l *Linkedlist[T]) GetAt(idx int) (*Linkedlist[T], error) {
+func (l *Linkedlist[T]) GetAt(idx int) (*node[T], error) {
 	if l == nil {
 		return nil, errors.New("cannot GetAt on an empty linked list")
 	}
@@ -173,61 +144,57 @@ func (l *Linkedlist[T]) GetAt(idx int) (*Linkedlist[T], error) {
 	return l.walkTo(idx)
 }
 
-func (l *Linkedlist[T]) InsertAt(val T, idx int) (*Linkedlist[T], error) {
+func (l *Linkedlist[T]) InsertAt(val T, idx int) error {
 	if l == nil {
-		return nil, errors.New("cannot insert at in an empty linked list")
+		return errors.New("cannot insert at in an empty linked list")
 	}
 
-	nodeAtIdx, err := l.walkTo(idx - 1)
-	if err != nil {
-		return nil, err
-	}
-
-	if idx == l.length {
-		return l.InsertLast(val), nil
+	if idx == l.length-1 {
+		l.InsertLast(val)
+		return nil
 	}
 	if idx == 0 {
-		return l.InsertFirst(val), nil
+		l.InsertFirst(val)
+		return nil
 	}
 
-	nextNode := nodeAtIdx.next
+	nodeBeforeIdx, err := l.walkTo(idx - 1)
+	if err != nil {
+		return err
+	}
+
+	nodeAtIdx := nodeBeforeIdx.next
+	newNode := &node[T]{Item: val}
+	newNode.next = nodeAtIdx
+	nodeBeforeIdx.next = newNode
 
 	l.length++
-	l.head.length = l.length
 
-	newNode := &Linkedlist[T]{Item: val}
-	newNode.length = l.length
-	newNode.head = l.head
-	newNode.next = nextNode
-
-	nodeAtIdx.next = newNode
-
-	return nodeAtIdx, nil
+	return nil
 }
 
-func (l *Linkedlist[T]) DeleteAt(idx int) (*Linkedlist[T], error) {
+func (l *Linkedlist[T]) DeleteAt(idx int) (*node[T], error) {
 	if l == nil {
 		return nil, errors.New("cannot delete from an empty linked list")
 	}
 
-	previousNode, err := l.walkTo(idx - 2)
-	if err != nil {
-		return nil, err
-	}
-
-	if idx == l.length {
+	if idx == l.length-1 {
 		return l.DeleteLast()
 	}
 	if idx == 0 {
 		return l.DeleteFirst()
 	}
 
-	l.length--
-	l.head.length = l.length
+	previousNode, err := l.walkTo(idx - 1)
+	if err != nil {
+		return nil, err
+	}
 
 	nodeToBeDeleted := previousNode.next
 	nextNode := nodeToBeDeleted.next
 	previousNode.next = nextNode
+
+	l.length--
 
 	return nodeToBeDeleted, nil
 }
