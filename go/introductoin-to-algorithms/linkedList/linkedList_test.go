@@ -264,3 +264,30 @@ func TestDeleteAt(t *testing.T) {
 		t.Fatalf("The diff %v should be 1", diff)
 	}
 }
+
+func TestReverse(t *testing.T) {
+	lL := linkedlist.LinkedList[int]{}
+	lL.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	last, err := lL.GetLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+	first, err := lL.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	lL.Reverse()
+
+	firstReversed, err := lL.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if first == firstReversed {
+		t.Fatalf("first %v should not be the same as the first after reverse %v", first, firstReversed)
+	}
+	if firstReversed != last {
+		t.Fatalf("first after reverse %v should equal the last %v before reverse", firstReversed, last)
+	}
+}

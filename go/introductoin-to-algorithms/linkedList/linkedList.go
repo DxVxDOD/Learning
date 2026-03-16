@@ -231,3 +231,26 @@ func (l *LinkedList[T]) DeleteAt(idx int) (T, error) {
 
 	return nodeToBeDeleted.item, nil
 }
+
+func (l *LinkedList[T]) Reverse() error {
+	if l.length < 1 {
+		return errors.New("cannot reverse an empty Linked List")
+	}
+
+	if l.length == 1 {
+		return nil
+	}
+
+	var prev *node[T]
+	curr := l.head
+	l.tail = l.head
+	for curr != nil {
+		x := curr.next
+		curr.next = prev
+		prev = curr
+		curr = x
+	}
+	l.head = prev
+
+	return nil
+}
