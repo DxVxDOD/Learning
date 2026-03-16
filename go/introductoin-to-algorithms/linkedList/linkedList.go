@@ -1,11 +1,11 @@
-// Package linkedlist respresentes a data structure called linked lists. This data structure is sequential but not contiguous in memory.
+// Package linkedlist represents a data structure called linked lists. This data structure is sequential but not contiguous in memory.
 package linkedlist
 
 import (
 	"errors"
 )
 
-type Linkedlist[T any] struct {
+type LinkedList[T any] struct {
 	head   *node[T]
 	tail   *node[T]
 	length int
@@ -16,7 +16,7 @@ type node[T any] struct {
 	next *node[T]
 }
 
-func (l *Linkedlist[T]) walkTo(idx int) (*node[T], error) {
+func (l *LinkedList[T]) walkTo(idx int) (*node[T], error) {
 	if idx >= l.length || idx < 0 {
 		return nil, errors.New("index out of bounds")
 	}
@@ -24,27 +24,26 @@ func (l *Linkedlist[T]) walkTo(idx int) (*node[T], error) {
 	nodeAtIdx := l.head
 	i := 0
 
-	for nodeAtIdx.next != nil && i < idx {
+	for i < idx {
 		nodeAtIdx = nodeAtIdx.next
 		i++
 	}
 	return nodeAtIdx, nil
 }
 
-func (l *Linkedlist[T]) init(val T) {
+func (l *LinkedList[T]) initWith(val T) {
 	l.head = &node[T]{item: val}
 	l.tail = l.head
 	l.length = 1
 }
 
-func (l *Linkedlist[T]) Build(arr []T) {
-	arrLen := len(arr)
-	for i := range arrLen {
-		l.InsertLast(arr[i])
+func (l *LinkedList[T]) Build(arr []T) {
+	for _, v := range arr {
+		l.InsertLast(v)
 	}
 }
 
-func (l *Linkedlist[T]) GetAll() []T {
+func (l *LinkedList[T]) GetAll() []T {
 	all := make([]T, l.length)
 	nextNode := l.head
 
@@ -58,11 +57,11 @@ func (l *Linkedlist[T]) GetAll() []T {
 	return all
 }
 
-func (l *Linkedlist[T]) Len() int {
+func (l *LinkedList[T]) Len() int {
 	return l.length
 }
 
-func (l *Linkedlist[T]) GetLast() (T, error) {
+func (l *LinkedList[T]) GetLast() (T, error) {
 	if l.tail == nil {
 		return *new(T), errors.New("cannot call GetLast on an empty Linkedlist")
 	}
@@ -70,9 +69,9 @@ func (l *Linkedlist[T]) GetLast() (T, error) {
 	return l.tail.item, nil
 }
 
-func (l *Linkedlist[T]) InsertLast(val T) {
+func (l *LinkedList[T]) InsertLast(val T) {
 	if l.tail == nil {
-		l.init(val)
+		l.initWith(val)
 	} else {
 		oldTail := l.tail
 		l.tail = &node[T]{item: val}
@@ -81,7 +80,7 @@ func (l *Linkedlist[T]) InsertLast(val T) {
 	}
 }
 
-func (l *Linkedlist[T]) DeleteLast() (T, error) {
+func (l *LinkedList[T]) DeleteLast() (T, error) {
 	if l.tail == nil {
 		return *new(T), errors.New("cannot delete from an empty linked list")
 	}
@@ -108,7 +107,7 @@ func (l *Linkedlist[T]) DeleteLast() (T, error) {
 	return oldTail.item, nil
 }
 
-func (l *Linkedlist[T]) GetFirst() (T, error) {
+func (l *LinkedList[T]) GetFirst() (T, error) {
 	if l.head == nil {
 		return *new(T), errors.New("cannot GetFirst on an empty linked list")
 	}
@@ -116,9 +115,9 @@ func (l *Linkedlist[T]) GetFirst() (T, error) {
 	return l.head.item, nil
 }
 
-func (l *Linkedlist[T]) InsertFirst(val T) {
+func (l *LinkedList[T]) InsertFirst(val T) {
 	if l.head == nil {
-		l.init(val)
+		l.initWith(val)
 	} else {
 		oldHead := l.head
 		l.head = &node[T]{item: val}
@@ -128,7 +127,7 @@ func (l *Linkedlist[T]) InsertFirst(val T) {
 	}
 }
 
-func (l *Linkedlist[T]) DeleteFirst() (T, error) {
+func (l *LinkedList[T]) DeleteFirst() (T, error) {
 	if l.head == nil {
 		return *new(T), errors.New("cannot delete from an empty linked list")
 	}
@@ -150,12 +149,12 @@ func (l *Linkedlist[T]) DeleteFirst() (T, error) {
 	return oldHead.item, nil
 }
 
-func (l *Linkedlist[T]) GetAt(idx int) (T, error) {
+func (l *LinkedList[T]) GetAt(idx int) (T, error) {
 	if l.head == nil {
 		return *new(T), errors.New("cannot GetAt on an empty linked list")
 	}
 
-	if idx < 0 || idx > l.length {
+	if idx < 0 || idx >= l.length {
 		return *new(T), errors.New("index out of bounds")
 	}
 
@@ -167,19 +166,21 @@ func (l *Linkedlist[T]) GetAt(idx int) (T, error) {
 	return nodeAtIdx.item, nil
 }
 
-func (l *Linkedlist[T]) InsertAt(val T, idx int) error {
-	if l.head == nil {
-		return errors.New("cannot insert at in an empty linked list")
-	}
-
+func (l *LinkedList[T]) InsertAt(val T, idx int) error {
 	if idx < 0 || idx > l.length {
 		return errors.New("index out of bounds")
+	}
+
+	if l.head == nil {
+		l.initWith(val)
+		return nil
 	}
 
 	if idx == l.length {
 		l.InsertLast(val)
 		return nil
 	}
+
 	if idx == 0 {
 		l.InsertFirst(val)
 		return nil
@@ -200,12 +201,12 @@ func (l *Linkedlist[T]) InsertAt(val T, idx int) error {
 	return nil
 }
 
-func (l *Linkedlist[T]) DeleteAt(idx int) (T, error) {
+func (l *LinkedList[T]) DeleteAt(idx int) (T, error) {
 	if l.head == nil {
 		return *new(T), errors.New("cannot delete from an empty linked list")
 	}
 
-	if idx < 0 || idx > l.length {
+	if idx < 0 || idx >= l.length {
 		return *new(T), errors.New("index out of bounds")
 	}
 
@@ -224,6 +225,7 @@ func (l *Linkedlist[T]) DeleteAt(idx int) (T, error) {
 	nodeToBeDeleted := previousNode.next
 	nextNode := nodeToBeDeleted.next
 	previousNode.next = nextNode
+	nodeToBeDeleted.next = nil
 
 	l.length--
 

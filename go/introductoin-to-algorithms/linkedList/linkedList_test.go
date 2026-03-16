@@ -8,7 +8,7 @@ import (
 )
 
 func TestBuildAndGetAll(t *testing.T) {
-	lL := linkedlist.Linkedlist[int]{}
+	lL := linkedlist.LinkedList[int]{}
 	lL.Build([]int{1, 3, 4, 5, 2, 6, 8, 5, 6, 9, 11})
 
 	all := lL.GetAll()
@@ -30,7 +30,7 @@ func TestBuildAndGetAll(t *testing.T) {
 }
 
 func TestInsertLast(t *testing.T) {
-	lL := linkedlist.Linkedlist[int]{}
+	lL := linkedlist.LinkedList[int]{}
 	lL.Build([]int{1})
 
 	valToBeInserted := 10
@@ -57,7 +57,7 @@ func TestInsertLast(t *testing.T) {
 }
 
 func TestGetLast(t *testing.T) {
-	lL := linkedlist.Linkedlist[int]{}
+	lL := linkedlist.LinkedList[int]{}
 	lL.Build([]int{1})
 
 	lRange := 13
@@ -76,7 +76,7 @@ func TestGetLast(t *testing.T) {
 }
 
 func TestDeleteLast(t *testing.T) {
-	lL := linkedlist.Linkedlist[int]{}
+	lL := linkedlist.LinkedList[int]{}
 	lL.Build([]int{1})
 
 	lRange := 13
@@ -112,8 +112,54 @@ func TestDeleteLast(t *testing.T) {
 	}
 }
 
+func TestDeleteFirst(t *testing.T) {
+	lL := linkedlist.LinkedList[int]{}
+	lL.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
+
+	deletedNodeItem, err := lL.DeleteFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	firstNodeItem, err := lL.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if firstNodeItem == deletedNodeItem {
+		t.Fatalf("The first item %v should equal the deleted node item %v", firstNodeItem, deletedNodeItem)
+	}
+
+	if firstNodeItem-1 != deletedNodeItem {
+		t.Fatalf("The first item %v should be smaller by (per tests logic) the deleted node item %v", firstNodeItem, deletedNodeItem)
+	}
+}
+
+func TestDeleteFirstSingleNode(t *testing.T) {
+	lL := linkedlist.LinkedList[int]{}
+	lL.Build([]int{1})
+
+	deletedNodeItem, err := lL.DeleteFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if deletedNodeItem != 1 {
+		t.Fatalf("deleted item %v should match the first in the original list %v", deletedNodeItem, 1)
+	}
+
+	if lL.Len() != 0 {
+		t.Fatal("Linkedlist should be empty")
+	}
+
+	_, err = lL.GetFirst()
+	if err == nil {
+		t.Fatal("Linkedlist head should be nil")
+	}
+}
+
 func TestInsertFirst(t *testing.T) {
-	lL := linkedlist.Linkedlist[int]{}
+	lL := linkedlist.LinkedList[int]{}
 	lL.Build([]int{1, 2, 3, 4})
 
 	valToBeInserted := 10
@@ -141,7 +187,7 @@ func TestInsertFirst(t *testing.T) {
 }
 
 func TestGetAt(t *testing.T) {
-	lL := linkedlist.Linkedlist[int]{}
+	lL := linkedlist.LinkedList[int]{}
 	lL.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
 
 	linkItemAtIdx, err := lL.GetAt(3)
@@ -161,7 +207,7 @@ func TestGetAt(t *testing.T) {
 }
 
 func TestInsertAt(t *testing.T) {
-	lL := linkedlist.Linkedlist[int]{}
+	lL := linkedlist.LinkedList[int]{}
 	lL.Build([]int{1, 2})
 
 	for i := range 5 {
@@ -192,7 +238,7 @@ func TestInsertAt(t *testing.T) {
 }
 
 func TestDeleteAt(t *testing.T) {
-	lL := linkedlist.Linkedlist[int]{}
+	lL := linkedlist.LinkedList[int]{}
 	lL.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
 	starterLen := lL.Len()
 
