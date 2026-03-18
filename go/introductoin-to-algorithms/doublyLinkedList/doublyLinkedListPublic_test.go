@@ -428,3 +428,81 @@ func TestDeleteLastEmpty(t *testing.T) {
 		t.Fatal("should no be able to delete from an empty list")
 	}
 }
+
+func TestDeleteAt(t *testing.T) {
+	dl := doublylinkedlist.DoublyLinkedList[int]{}
+	dl.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	starterLen := dl.Len()
+	deleteIdx := 4
+
+	atVal, err := dl.GetAt(deleteIdx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	deletedVal, err := dl.DeleteAt(deleteIdx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	afterLen := dl.Len()
+
+	if starterLen <= afterLen {
+		t.Fatalf("starterLen %v should be larger than afterLen %v", starterLen, afterLen)
+	}
+
+	if starterLen-1 != afterLen {
+		t.Fatalf("afterLen %v should be strictly less by one starterLen%v", afterLen, starterLen)
+	}
+
+	if atVal != deletedVal {
+		t.Fatalf("the deletedVal %v should equal the atVal %v", deletedVal, atVal)
+	}
+
+	_, err = dl.DeleteAt(-2)
+	if err == nil {
+		t.Fatal("should be out of bounds")
+	}
+
+	_, err = dl.DeleteAt(12)
+	if err == nil {
+		t.Fatal("should be out of bounds")
+	}
+
+	first, err := dl.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	deletedFirst, err := dl.DeleteAt(0)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if deletedFirst != first {
+		t.Fatalf("should have deleted the first at idx 0, got %v", deletedFirst)
+	}
+
+	last, err := dl.GetLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	deletedLast, err := dl.DeleteAt(dl.Len() - 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if deletedLast != last {
+		t.Fatalf("should have deleted the last elememt, got %v", deletedLast)
+	}
+}
+
+func TestDeleteAtEmpty(t *testing.T) {
+	emptyDl := doublylinkedlist.DoublyLinkedList[int]{}
+
+	_, err := emptyDl.DeleteAt(1)
+	if err == nil {
+		t.Fatal("should not be able to delete at from an epmpty list")
+	}
+}

@@ -193,3 +193,30 @@ func (d *DoublyLinkedList[T]) DeleteLast() (T, error) {
 
 	return nodeToBeDeleted.item, nil
 }
+
+func (d *DoublyLinkedList[T]) DeleteAt(idx int) (T, error) {
+	if d.lenght == 0 {
+		return *new(T), errors.New("cannot delete from an empty list")
+	}
+
+	if idx < 0 || idx >= d.lenght {
+		return *new(T), errors.New("index out of bounds")
+	}
+
+	if idx == 0 {
+		return d.DeleteFirst()
+	}
+	if idx == d.lenght-1 {
+		return d.DeleteLast()
+	}
+
+	nodeToBeDeleted := d.walkTo(idx)
+	nextNode := nodeToBeDeleted.next
+	prevNode := nodeToBeDeleted.prev
+	prevNode.next = nextNode
+	nextNode.prev = prevNode
+
+	d.lenght--
+
+	return nodeToBeDeleted.item, nil
+}
