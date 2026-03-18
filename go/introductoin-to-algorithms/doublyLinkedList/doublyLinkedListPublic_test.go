@@ -264,4 +264,80 @@ func TestInserAtEmpty(t *testing.T) {
 }
 
 func TestDeleteFirst(t *testing.T) {
+	dl := doublylinkedlist.DoublyLinkedList[int]{}
+	dl.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	starterLen := dl.Len()
+
+	first, err := dl.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	deletedVal, err := dl.DeleteFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	afterLen := dl.Len()
+
+	if afterLen >= starterLen {
+		t.Fatalf("starterLen %v should be larger than afterLen %v", starterLen, afterLen)
+	}
+	if afterLen+1 != starterLen {
+		t.Fatalf("afterLen %v + 1 should equal starterLen %v", afterLen, starterLen)
+	}
+
+	if first != deletedVal {
+		t.Fatalf("the returned val by delete first %v should be equal the first val %v", deletedVal, first)
+	}
+
+	second, err := dl.GetAt(1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondFirst, err := dl.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if second != secondFirst+1 {
+		t.Fatalf("the second value %v should be larger by one per initialisation than the first %v", second, secondFirst)
+	}
+}
+
+func TestDeleteFirstOneElement(t *testing.T) {
+	dl := doublylinkedlist.DoublyLinkedList[int]{}
+	dl.Build([]int{1})
+
+	first, err := dl.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	deletedVal, err := dl.DeleteFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if deletedVal != first {
+		t.Fatalf("the returned val by delete first %v should be equal the first val %v", deletedVal, first)
+	}
+
+	_, err = dl.GetFirst()
+	if err == nil {
+		t.Fatal("the list should be epmpty")
+	}
+
+	if dl.Len() != 0 {
+		t.Fatal("the lenght of the list should be 0")
+	}
+}
+
+func TestDeleteFirstEmpty(t *testing.T) {
+	dl := doublylinkedlist.DoublyLinkedList[int]{}
+
+	_, err := dl.DeleteFirst()
+	if err == nil {
+		t.Fatal("should no be able to delete from an empty list")
+	}
 }

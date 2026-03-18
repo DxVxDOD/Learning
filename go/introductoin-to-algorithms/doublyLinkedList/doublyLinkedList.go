@@ -27,7 +27,7 @@ func (d *DoublyLinkedList[T]) initWith(val T) {
 
 func (d *DoublyLinkedList[T]) walkTo(idx int) *node[T] {
 	var curr *node[T]
-	if d.lenght/2 > idx {
+	if d.lenght/2 < idx {
 		curr = d.tail
 		for range idx {
 			curr = curr.prev
@@ -159,12 +159,15 @@ func (d *DoublyLinkedList[T]) DeleteFirst() (T, error) {
 		item := d.head.item
 		d.head = nil
 		d.tail = nil
+		d.lenght--
 		return item, nil
 	}
 
 	nodeToBeDeleted := d.head
 	d.head = nodeToBeDeleted.next
 	d.head.prev = nil
+
+	d.lenght--
 
 	return nodeToBeDeleted.item, nil
 }
