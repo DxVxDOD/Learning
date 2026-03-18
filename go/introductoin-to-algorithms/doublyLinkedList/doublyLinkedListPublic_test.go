@@ -23,6 +23,10 @@ func TestGetMethods(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	atEndish, err := dl.GetAt(5)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	if first != 1 {
 		t.Fatalf("first value %v should be equal to 1", first)
@@ -33,7 +37,11 @@ func TestGetMethods(t *testing.T) {
 	}
 
 	if at != 5 {
-		t.Fatalf("at value %v should be equal to 8", at)
+		t.Fatalf("at value %v should be equal to 6", at)
+	}
+
+	if atEndish != 6 {
+		t.Fatalf("atEndish %v should be 6", atEndish)
 	}
 
 	_, err = dl.GetAt(11)
@@ -238,31 +246,6 @@ func TestInsertAt(t *testing.T) {
 	}
 }
 
-func TestInserAtEmpty(t *testing.T) {
-	emptyDL := doublylinkedlist.DoublyLinkedList[int]{}
-
-	emptyVal := 10
-	emptyAtIdx := 11
-	err := emptyDL.InsertAt(emptyVal, emptyAtIdx)
-	if err == nil {
-		t.Fatalf("You should not be able to insert above 0 on ane empty list, idx %v", emptyAtIdx)
-	}
-
-	err = emptyDL.InsertAt(emptyVal, 0)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	firstEmpty, err := emptyDL.GetFirst()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if firstEmpty != emptyVal {
-		t.Fatalf("the first value %v in the list should equal the inserted value %v", firstEmpty, emptyVal)
-	}
-}
-
 func TestDeleteFirst(t *testing.T) {
 	dl := doublylinkedlist.DoublyLinkedList[int]{}
 	dl.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
@@ -305,6 +288,31 @@ func TestDeleteFirst(t *testing.T) {
 	}
 }
 
+func TestInserAtEmpty(t *testing.T) {
+	emptyDL := doublylinkedlist.DoublyLinkedList[int]{}
+
+	emptyVal := 10
+	emptyAtIdx := 11
+	err := emptyDL.InsertAt(emptyVal, emptyAtIdx)
+	if err == nil {
+		t.Fatalf("You should not be able to insert above 0 on ane empty list, idx %v", emptyAtIdx)
+	}
+
+	err = emptyDL.InsertAt(emptyVal, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	firstEmpty, err := emptyDL.GetFirst()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if firstEmpty != emptyVal {
+		t.Fatalf("the first value %v in the list should equal the inserted value %v", firstEmpty, emptyVal)
+	}
+}
+
 func TestDeleteFirstOneElement(t *testing.T) {
 	dl := doublylinkedlist.DoublyLinkedList[int]{}
 	dl.Build([]int{1})
@@ -337,6 +345,85 @@ func TestDeleteFirstEmpty(t *testing.T) {
 	dl := doublylinkedlist.DoublyLinkedList[int]{}
 
 	_, err := dl.DeleteFirst()
+	if err == nil {
+		t.Fatal("should no be able to delete from an empty list")
+	}
+}
+
+func TestDeleteLast(t *testing.T) {
+	dl := doublylinkedlist.DoublyLinkedList[int]{}
+	dl.Build([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	starterLen := dl.Len()
+
+	last, err := dl.GetLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	deletedVal, err := dl.DeleteLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	afterLen := dl.Len()
+
+	if afterLen >= starterLen {
+		t.Fatalf("starterLen %v should be larger than afterLen %v", starterLen, afterLen)
+	}
+	if afterLen+1 != starterLen {
+		t.Fatalf("afterLen %v + 1 should equal starterLen %v", afterLen, starterLen)
+	}
+
+	if last != deletedVal {
+		t.Fatalf("the returned val by delete last %v should be equal the first val %v", deletedVal, last)
+	}
+
+	second, err := dl.GetAt(dl.Len() - 2)
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondLast, err := dl.GetLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if second+1 != secondLast {
+		t.Fatalf("the second value %v should be smaller by one per initialisation than the last %v", second, secondLast)
+	}
+}
+
+func TestDeleteLastOneElement(t *testing.T) {
+	dl := doublylinkedlist.DoublyLinkedList[int]{}
+	dl.Build([]int{1})
+
+	last, err := dl.GetLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	deletedVal, err := dl.DeleteLast()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if deletedVal != last {
+		t.Fatalf("the returned val by delete last %v should be equal the last val %v", deletedVal, last)
+	}
+
+	_, err = dl.GetLast()
+	if err == nil {
+		t.Fatal("the list should be epmpty")
+	}
+
+	if dl.Len() != 0 {
+		t.Fatal("the lenght of the list should be 0")
+	}
+}
+
+func TestDeleteLastEmpty(t *testing.T) {
+	dl := doublylinkedlist.DoublyLinkedList[int]{}
+
+	_, err := dl.DeleteLast()
 	if err == nil {
 		t.Fatal("should no be able to delete from an empty list")
 	}

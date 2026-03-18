@@ -29,7 +29,7 @@ func (d *DoublyLinkedList[T]) walkTo(idx int) *node[T] {
 	var curr *node[T]
 	if d.lenght/2 < idx {
 		curr = d.tail
-		for range idx {
+		for range d.lenght - idx - 1 {
 			curr = curr.prev
 		}
 	} else {
@@ -166,6 +166,28 @@ func (d *DoublyLinkedList[T]) DeleteFirst() (T, error) {
 	nodeToBeDeleted := d.head
 	d.head = nodeToBeDeleted.next
 	d.head.prev = nil
+
+	d.lenght--
+
+	return nodeToBeDeleted.item, nil
+}
+
+func (d *DoublyLinkedList[T]) DeleteLast() (T, error) {
+	if d.lenght == 0 {
+		return *new(T), errors.New("cannot delete from an empty list")
+	}
+
+	if d.lenght == 1 {
+		item := d.head.item
+		d.head = nil
+		d.tail = nil
+		d.lenght--
+		return item, nil
+	}
+
+	nodeToBeDeleted := d.tail
+	d.tail = nodeToBeDeleted.prev
+	d.tail.next = nil
 
 	d.lenght--
 
