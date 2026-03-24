@@ -1,17 +1,22 @@
 {
   "name": "mit6006",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsx index.ts"
+    "test": "tsx --test",
+    "test:watch": "tsx --test --watch",
+    "test:watch:only": "tsx --test-only --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.32.1",
+  "packageManager": "pnpm@10.33.0",
   "devDependencies": {
+    "@tsconfig/node-ts": "^23.6.4",
+    "@tsconfig/recommended": "^1.0.13",
+    "@types/node": "^25.5.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }
