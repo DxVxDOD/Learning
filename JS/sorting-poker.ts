@@ -77,10 +77,7 @@ function sortPoker(jhon: string, uncle: string) {
 }
 
 console.log(
-  sortPoker(
-    "♦6♥2♠3♦5♠J♣Q♠K♣7♦2♣5♥5♥10♠A",
-    "♠2♠3♠5♥J♥Q♥K♣8♣9♣10♦4♦5♦6♦7",
-  ),
+  sortPoker("♦6♥2♠3♦5♠J♣Q♠K♣7♦2♣5♥5♥10♠A", "♠2♠3♠5♥J♥Q♥K♣8♣9♣10♦4♦5♦6♦7"),
 );
 
 function sortPokers(john: string, uncle: string) {
